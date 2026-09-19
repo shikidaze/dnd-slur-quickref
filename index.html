@@ -82,13 +82,13 @@
   .group{
     position:relative;margin:0 0 16px;padding:12px 12px 14px;border-radius:var(--r);
     border:1px solid var(--line);overflow:hidden;scroll-margin-top:130px;
-    background:#191613;
-    border-bottom-color:rgba(200,161,92,.22);
-    /* Bottom of every column: a strong dark inset (visible where a picture fills the
-       column) plus a 1 px gold hairline, so the seam reads even on a dark column
-       whose artwork ends well above the bottom. */
-    box-shadow:0 -30px 38px -18px rgba(0,0,0,1) inset,
-               0 -1px 0 0 rgba(200,161,92,.18) inset;
+    /* The column's own background is a gradient (lighter at the top, black at the
+       bottom): a dark inset shadow is invisible on a flat near-black column, so the
+       bottom fade needs something to fade FROM. */
+    background:linear-gradient(180deg,#231e18 0%,#1c1713 55%,#12100e 100%);
+    border-bottom-color:rgba(200,161,92,.24);
+    box-shadow:0 -72px 84px -34px rgba(0,0,0,1) inset,
+               0 -1px 0 0 rgba(200,161,92,.2) inset;
   }
   /* The illustration is the column's background: a real <img> so the browser sizes
      it for us (no aspect maths), with a 24 px stand-in underneath for instant paint
@@ -105,10 +105,10 @@
   .group.art-on::after{
     content:'';position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,
-      rgba(18,16,14,.34) 0px,
-      rgba(18,16,14,.50) 200px,
-      rgba(18,16,14,.70) 420px,
-      rgba(18,16,14,.90) calc(100% - 64px),
+      rgba(18,16,14,.30) 0px,
+      rgba(18,16,14,.46) 200px,
+      rgba(18,16,14,.66) 420px,
+      rgba(18,16,14,.86) calc(100% - 150px),
       rgba(18,16,14,1) 100%);
   }
   .group>*{position:relative;z-index:1}
