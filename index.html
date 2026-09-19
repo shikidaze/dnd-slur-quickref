@@ -77,39 +77,53 @@
   .chip.on{background:linear-gradient(145deg,var(--gold2),#a8813f);color:#1a1510;border-color:transparent;font-weight:600}
   /* ---------- list ---------- */
   main{padding:12px 14px 0}
-  .group{margin:0 0 18px;scroll-margin-top:130px}
+  /* a race group: the illustration is the background of the WHOLE column, darkened
+     top-to-bottom so the title and the entry cards stay readable on top of it */
+  .group{
+    position:relative;margin:0 0 14px;padding:12px 12px 14px;border-radius:var(--r);
+    border:1px solid var(--line);overflow:hidden;scroll-margin-top:130px;
+    background:#191613;
+  }
+  /* The illustration is the column's background. It is shown at full column width
+     (so the whole picture is visible and sharp) and anchored to the top; the scrim
+     fades it into the dark column further down, where the entry cards live. */
+  .group.art-on::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background-image:var(--art);background-repeat:no-repeat;
+    background-size:100% auto;background-position:center top;
+    opacity:.9;
+  }
+  .group.art-on::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,
+      rgba(18,16,14,.22) 0px,
+      rgba(18,16,14,.45) 240px,
+      rgba(18,16,14,.86) 430px,
+      rgba(18,16,14,.92) 100%);
+  }
+  /* a very short column (few entries) is shorter than the picture, so fill the box
+     instead of cutting the artwork off at the bottom */
+  .group.art-on[data-h="short"]::before{background-size:cover;background-position:center 24%}
+  .group.art-on[data-h="short"]::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,
+      rgba(18,16,14,.30) 0%,
+      rgba(18,16,14,.52) 45%,
+      rgba(18,16,14,.84) 100%);
+  }
+  .group>*{position:relative;z-index:1}
   .ghead{
-    display:flex;align-items:baseline;gap:8px;margin:0 2px 8px;
-    padding-bottom:6px;border-bottom:1px solid var(--line);
+    display:flex;align-items:baseline;gap:8px;margin:0 2px 9px;
+    padding-bottom:7px;border-bottom:1px solid rgba(200,161,92,.22);
   }
   .ghead .ic{font-size:17px;line-height:1}
-  .ghead .zh{font-size:16px;font-weight:700;letter-spacing:.01em}
-  .ghead .en{font-size:11.5px;color:var(--ink3);letter-spacing:.05em;text-transform:uppercase}
-  .ghead .n{margin-left:auto;font-size:11.5px;color:var(--ink3);
-    background:var(--card);border:1px solid var(--line);padding:1px 8px;border-radius:999px}
-  /* race banner: the illustration sits behind the group title, darkened so the
-     name and the entry cards stay readable */
-  .gbanner{
-    position:relative;display:flex;align-items:flex-end;gap:8px;
-    height:118px;margin:0 0 10px;padding:10px 12px 11px;border-radius:var(--r);
-    border:1px solid var(--line);overflow:hidden;
-    background-color:#1c1815;background-size:cover;background-position:center 26%;
-    box-shadow:0 12px 28px -20px #000 inset, 0 1px 0 rgba(200,161,92,.14) inset;
-  }
-  .gbanner::after{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:
-      linear-gradient(180deg,rgba(18,16,14,.10) 0%,rgba(18,16,14,.45) 52%,rgba(18,16,14,.92) 100%),
-      linear-gradient(90deg,rgba(18,16,14,.55) 0%,rgba(18,16,14,0) 45%);
-  }
-  .gbanner>*{position:relative;z-index:1}
-  .gbanner .ic{font-size:19px;line-height:1;filter:drop-shadow(0 1px 3px #000)}
-  .gbanner .zh{font-size:17.5px;font-weight:700;letter-spacing:.02em;text-shadow:0 1px 8px rgba(0,0,0,.95)}
-  .gbanner .en{font-size:11px;color:var(--gold2);letter-spacing:.06em;text-transform:uppercase;
-    text-shadow:0 1px 8px rgba(0,0,0,.95)}
-  .gbanner .n{margin-left:auto;font-size:11px;color:var(--ink);
-    background:rgba(18,16,14,.55);backdrop-filter:blur(3px);
-    border:1px solid rgba(200,161,92,.35);padding:1px 8px;border-radius:999px}
+  .ghead .zh{font-size:16.5px;font-weight:700;letter-spacing:.01em;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .ghead .en{font-size:11.5px;color:var(--gold2);letter-spacing:.05em;text-transform:uppercase;
+    text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .ghead .n{margin-left:auto;font-size:11.5px;color:var(--ink2);
+    background:rgba(18,16,14,.55);border:1px solid rgba(200,161,92,.3);
+    padding:1px 8px;border-radius:999px}
+  ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
   /* back to top (334 entries is a long scroll) */
   #top{
     position:fixed;right:14px;bottom:calc(18px + var(--safe-b));z-index:40;
@@ -120,13 +134,12 @@
     opacity:0;transform:translateY(12px);pointer-events:none;transition:.22s;
   }
   #top.on{opacity:1;transform:none;pointer-events:auto}
-  ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
   li{
     display:flex;align-items:center;gap:10px;
-    background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:11px 13px;transition:.14s;
+    background:rgba(30,26,22,.74);border:1px solid var(--line);border-radius:var(--r);
+    padding:10px 12px;transition:.14s;
   }
-  li:active{background:var(--card2);transform:scale(.995)}
+  li:active{background:rgba(42,37,31,.86);transform:scale(.995)}
   .txt{min-width:0;flex:1}
   .zh{font-size:16.5px;font-weight:600;letter-spacing:.01em;word-break:break-word}
   .en{font-size:13px;color:var(--gold);margin-top:2px;letter-spacing:.01em;
@@ -276,21 +289,14 @@
     html += introBlock(term);
     groups.forEach(function(g){
       var art = artFor(g.key);
-      html += '<section class="group" id="g-' + g.key + '">';
-      if(art){
-        // race illustration as the group banner (falls back to the plain header);
-        // the URL is attached lazily by paintBanners()
-        html += '<div class="gbanner" data-art="' + esc(art) + '">' +
-                '<span class="ic">' + g.icon + '</span>' +
-                '<span class="zh">' + esc(g.zh) + '</span>' +
-                '<span class="en">' + esc(g.en) + '</span>' +
-                '<span class="n">' + g.entries.length + '</span></div><ul>';
-      } else {
-        html += '<div class="ghead"><span class="ic">' + g.icon + '</span>' +
-                '<span class="zh">' + esc(g.zh) + '</span>' +
-                '<span class="en">' + esc(g.en) + '</span>' +
-                '<span class="n">' + g.entries.length + '</span></div><ul>';
-      }
+      // the illustration becomes this group's background; the URL is attached
+      // lazily by paintBanners() so 25 images are not decoded at once
+      var tall = g.entries.length > 6 ? 'tall' : 'short';
+      html += '<section class="group" id="g-' + g.key + '" data-h="' + tall + '"' + (art ? ' data-art="' + esc(art) + '"' : '') + '>';
+      html += '<div class="ghead"><span class="ic">' + g.icon + '</span>' +
+              '<span class="zh">' + esc(g.zh) + '</span>' +
+              '<span class="en">' + esc(g.en) + '</span>' +
+              '<span class="n">' + g.entries.length + '</span></div><ul>';
       g.entries.forEach(function(e){
         var k = key(e), on = favs.has(k);
         html += '<li data-k="' + esc(k) + '"><div class="txt">' +
@@ -312,14 +318,16 @@
     var A = window.DND_ASSETS || {};
     return A[k] || null;
   }
-  /* 25 banners decoded at once would cost ~90 MB of image memory on a phone, so the
-     background is only attached when the banner comes near the viewport. */
+  /* 25 backgrounds decoded at once would cost ~90 MB of image memory on a phone,
+     so a group's art is only attached when the group comes near the viewport. */
   function paintBanners(){
-    var nodes = [].slice.call(main.querySelectorAll('.gbanner[data-art]'));
+    var nodes = [].slice.call(main.querySelectorAll('.group[data-art]'));
     if(!nodes.length) return;
     var show = function(el){
-      el.style.backgroundImage = 'url(' + el.getAttribute('data-art') + ')';
-      el.removeAttribute('data-art');
+      el.style.setProperty('--art', 'url(' + el.getAttribute('data-art') + ')');
+      // NOTE: data-art is deliberately kept — it is what the observer keys on — the
+      // styling itself hangs off this class
+      el.classList.add('art-on');
     };
     if(!('IntersectionObserver' in window)){ nodes.forEach(show); return; }
     var io = new IntersectionObserver(function(entries){
@@ -328,7 +336,7 @@
         show(en.target);
         io.unobserve(en.target);
       });
-    }, { rootMargin: '600px 0px' });
+    }, { rootMargin: '700px 0px' });
     nodes.forEach(function(el){ io.observe(el); });
   }
   function emptyBox(icon, title, sub){    return '<div class="empty"><b>' + icon + '</b>' + esc(title) + '<div style="margin-top:6px">' + esc(sub) + '</div></div>';
