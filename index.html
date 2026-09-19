@@ -83,9 +83,12 @@
     position:relative;margin:0 0 16px;padding:12px 12px 14px;border-radius:var(--r);
     border:1px solid var(--line);overflow:hidden;scroll-margin-top:130px;
     background:#191613;
-    /* a soft dark edge along the bottom of every column, so one race reads as
-       separate from the next one even when its picture fills the whole column */
-    box-shadow:0 -30px 38px -18px rgba(0,0,0,1) inset;
+    border-bottom-color:rgba(200,161,92,.22);
+    /* Bottom of every column: a strong dark inset (visible where a picture fills the
+       column) plus a 1 px gold hairline, so the seam reads even on a dark column
+       whose artwork ends well above the bottom. */
+    box-shadow:0 -30px 38px -18px rgba(0,0,0,1) inset,
+               0 -1px 0 0 rgba(200,161,92,.18) inset;
   }
   /* The illustration is the column's background: a real <img> so the browser sizes
      it for us (no aspect maths), with a 24 px stand-in underneath for instant paint
