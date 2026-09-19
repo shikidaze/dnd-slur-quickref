@@ -268,6 +268,7 @@
 
 <script src="assets-tiny.js"></script>
 <script src="assets.js"></script>
+<script src="focal.js"></script>
 <script src="data.js"></script>
 <script>
 (function(){
@@ -400,7 +401,17 @@
         var sec = img.closest ? img.closest('.group') : null;
         if(sec){
           var artH = img.naturalHeight / img.naturalWidth * sec.clientWidth;
-          sec.classList.add(sec.clientHeight > artH * 1.12 ? 'art-top' : 'art-fill');
+          var tallMode = sec.clientHeight > artH * 1.12;
+          sec.classList.add(tallMode ? 'art-top' : 'art-fill');
+          // keep the FACE in frame when the picture is cropped to fill the column.
+          // object-position y% means "image y% aligns with container y%", so place the
+          // head at the container's centre: y = (head - c/2) / (1 - c)
+          var head = (window.DND_FOCAL || {})[sec.id.replace(/^g-/, '')];
+          if(head && !tallMode){
+            var c = Math.min(0.95, sec.clientHeight / artH);
+            var y = (head / 100 - c / 2) / (1 - c) * 100;
+            img.style.objectPosition = 'center ' + Math.max(0, Math.min(100, Math.round(y))) + '%';
+          }
         }
       };
       // images may come from a mirror CDN (much faster than github.io from mainland
