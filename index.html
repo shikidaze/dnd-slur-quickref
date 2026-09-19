@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#12100e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="D&D 黑话">
+<title>D&D 种族黑话速查</title>
+<style>
+  :root{
+    --bg:#12100e; --bg2:#1b1815; --card:#211d19; --card2:#2a251f;
+    --line:#3a332b; --ink:#ece5da; --ink2:#a99f92; --ink3:#6f665c;
+    --gold:#c8a15c; --gold2:#e0bd7c; --blood:#a2453c;
+    --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+    --r:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #2a2118 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, #1d2622 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
+    min-height:100vh; padding-bottom:calc(28px + var(--safe-b));
+    overscroll-behavior-y:none;
+  }
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:30;
+    padding:calc(10px + var(--safe-t)) 14px 10px;
+    background:linear-gradient(180deg,rgba(18,16,14,.97) 70%,rgba(18,16,14,.82));
+    backdrop-filter:blur(12px) saturate(140%);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .d20{
+    width:34px;height:34px;flex:0 0 34px;border-radius:10px;
+    background:linear-gradient(145deg,var(--gold2),#8c6a33);
+    display:grid;place-items:center;color:#1a1510;font-weight:800;font-size:15px;
+    box-shadow:0 2px 10px rgba(200,161,92,.28);
+  }
+  .brand h1{font-size:16.5px;margin:0;font-weight:700;letter-spacing:.02em}
+  .brand .sub{font-size:11.5px;color:var(--ink3);margin-top:1px;letter-spacing:.04em}
+  .searchbox{position:relative}
+  .searchbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
+  #q{
+    width:100%;padding:11px 40px 11px 38px;border-radius:12px;
+    background:var(--card);border:1px solid var(--line);color:var(--ink);
+    font-size:16px;outline:none;transition:border-color .15s,background .15s;
+  }
+  #q:focus{border-color:var(--gold);background:var(--card2)}
+  #q::placeholder{color:var(--ink3)}
+  #clear{
+    position:absolute;right:6px;top:50%;transform:translateY(-50%);
+    width:30px;height:30px;border:0;border-radius:50%;background:transparent;
+    color:var(--ink3);font-size:18px;display:none;cursor:pointer;
+  }
+  #clear.on{display:block}
+  /* ---------- chips ---------- */
+  #chips{
+    display:flex;gap:8px;overflow-x:auto;padding:10px 14px 2px;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  #chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto;padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);color:var(--ink2);font-size:13px;white-space:nowrap;cursor:pointer;
+    transition:.15s;
+  }
+  .chip.on{background:linear-gradient(145deg,var(--gold2),#a8813f);color:#1a1510;border-color:transparent;font-weight:600}
+  /* ---------- list ---------- */
+  main{padding:12px 14px 0}
+  .group{margin:0 0 18px;scroll-margin-top:130px}
+  .ghead{
+    display:flex;align-items:baseline;gap:8px;margin:0 2px 8px;
+    padding-bottom:6px;border-bottom:1px solid var(--line);
+  }
+  .ghead .ic{font-size:17px;line-height:1}
+  .ghead .zh{font-size:16px;font-weight:700;letter-spacing:.01em}
+  .ghead .en{font-size:11.5px;color:var(--ink3);letter-spacing:.05em;text-transform:uppercase}
+  .ghead .n{margin-left:auto;font-size:11.5px;color:var(--ink3);
+    background:var(--card);border:1px solid var(--line);padding:1px 8px;border-radius:999px}
+  ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+  li{
+    display:flex;align-items:center;gap:10px;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:11px 13px;transition:.14s;
+  }
+  li:active{background:var(--card2);transform:scale(.995)}
+  .txt{min-width:0;flex:1}
+  .zh{font-size:16.5px;font-weight:600;letter-spacing:.01em;word-break:break-word}
+  .en{font-size:13px;color:var(--gold);margin-top:2px;letter-spacing:.01em;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-word}
+  .sub{display:inline-block;margin-top:5px;font-size:11px;color:var(--ink3);
+       border:1px dashed var(--line);border-radius:999px;padding:1px 8px}
+  .star{
+    flex:0 0 30px;width:30px;height:30px;border:0;border-radius:9px;background:transparent;
+    color:var(--ink3);font-size:16px;cursor:pointer;display:grid;place-items:center;
+  }
+  .star.on{color:var(--gold2)}
+  mark{background:rgba(200,161,92,.32);color:var(--gold2);border-radius:3px;padding:0 1px}
+  /* ---------- misc ---------- */
+  .empty{text-align:center;color:var(--ink3);padding:48px 20px;font-size:14.5px}
+  .empty b{display:block;font-size:34px;margin-bottom:10px;opacity:.5}
+  details.note{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:11px 13px;margin-bottom:10px;font-size:13.5px;color:var(--ink2);
+  }
+  details.note summary{cursor:pointer;color:var(--ink);font-weight:600;font-size:14px}
+  details.note .body{margin-top:8px;white-space:pre-wrap;line-height:1.65}
+  .apx{padding:9px 0;border-bottom:1px dashed var(--line)}
+  .apx:last-child{border-bottom:0}
+  .apx-zh{font-size:13.5px;color:var(--ink)}
+  .apx-en{font-size:13px;color:var(--gold);margin-top:2px;word-break:break-word}
+  .apx .sub{margin-top:4px}
+  footer{margin:26px 14px 0;padding-top:14px;border-top:1px solid var(--line);
+         color:var(--ink3);font-size:11.5px;line-height:1.7;text-align:center}
+  .toast{
+    position:fixed;left:50%;bottom:calc(24px + var(--safe-b));transform:translateX(-50%) translateY(20px);
+    background:var(--card2);border:1px solid var(--line);color:var(--ink);
+    padding:9px 16px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;
+    transition:.22s;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media (min-width:620px){
+    main{max-width:680px;margin:0 auto}
+    header>div, #chips{max-width:680px;margin-left:auto;margin-right:auto}
+    ul{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">
+      <div class="d20">D20</div>
+      <div>
+        <h1>种族黑话速查</h1>
+        <div class="sub" id="brandSub">The Big List of Racial Slurs</div>
+      </div>
+    </div>
+    <div class="searchbox">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <input id="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
+             autocorrect="off" autocapitalize="off" spellcheck="false"
+             placeholder="搜索中文 / English…">
+      <button id="clear" aria-label="清空">×</button>
+    </div>
+  </div>
+  <div id="chips"></div>
+</header>
+
+<main id="main"></main>
+
+<footer id="foot"></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+window.DND_DATA = {
+ "meta": {
+  "title": "D&D 种族黑话速查",
+  "subtitle": "The Big List of Racial Slurs",
+  "counts": {
+   "entries": 334,
+   "groups": 23,
+   "pages": 28
+  },
+  "source": "种族歧视用语清单.pdf（28 页）",
+  "disclaimer": "奇幻设定内的虚构用语，仅限跑团桌上使用；请勿用于现实中的任何人。"
+ },
+ "intro": [
+  "I compiled a list o f racial slurs for y ou t o use in conv er sation!",
+  "我整理了一份种族歧视用语清单，供你在对话中使用！",
+  "As y ou can see from the title, I'm hoping w e can r each r/all and confus e",
+  "a lot o f people.",
+  "正如标题所示，我希望我们能冲上 r/all 首页，让很多人摸不着头脑。",
+  "Cr edit goes t o ev er y one who post ed her e. Other wise this list w ould be",
+  "about fiv e it ems long. Thanks t o them, w e hav e 13 p ages o f racial slurs.",
+  "功劳归于所有在此发帖的人。否则这份清单大概只有五条。多亏了他们，我们",
+  "才有了整整 13 页的种族歧视用语。",
+  "please feel fr ee t o comment if any o f these is der ogat or y t o a r eal-w orld",
+  "race",
+  "如果其中任何一条涉及现实世界种族的贬损含义，请随时留言指出。",
+  "So, without further ado, I present",
+  "那么，闲话少说，我这就奉上",
+  "The Big List o f Racial Slurs",
+  "种族侮辱大列表"
+ ],
+ "groups": [
+  {
+   "key": "dwarf",
+   "icon": "🐗",
+   "zh": "矮人",
+   "en": "Dwarves",
+   "entries": [
+    {
+     "zh": "胡须地精",
+     "en": "Beard-goblin",
+     "page": 2
+    },
+    {
+     "zh": "跳蚤胡须的酒渍",
+     "en": "Flea-bearded alestain",
+     "page": 2
+    },
+    {
+     "zh": "矮墩子",
+     "en": "Stunty",
+     "page": 2
+    },
+    {
+     "zh": "吸泵者",
+     "en": "Pump Sucker",
+     "page": 2
+    },
+    {
+     "zh": "石屎者",
+     "en": "Stone shitter",
+     "page": 2
+    },
+    {
+     "zh": "半截酒鬼",
+     "en": "half-sized alcoholic",
+     "page": 2
+    },
+    {
+     "zh": "蛆虫（据传说！）",
+     "en": "Maggots (according to legend!)",
+     "page": 2
+    },
+    {
+     "zh": "食石者",
+     "en": "rock eater",
+     "page": 2
+    },
+    {
+     "zh": "石穹",
+     "en": "Stone Domes",
+     "page": 2
+    },
+    {
+     "zh": "沟渠鼠",
+     "en": "Gutter Rats",
+     "page": 2
+    },
+    {
+     "zh": "暴躁脚凳",
+     "en": "Angry Footstool",
+     "page": 2
+    },
+    {
+     "zh": "石脑壳",
+     "en": "Rockhead",
+     "page": 2
+    },
+    {
+     "zh": "毛茸茸的半身人",
+     "en": "Hairy Halfling",
+     "page": 2
+    },
+    {
+     "zh": "地沟鼠",
+     "en": "Tunnel Rat",
+     "page": 2
+    },
+    {
+     "zh": "阴毛脸",
+     "en": "Pubic Face",
+     "page": 3
+    },
+    {
+     "zh": "洞穴河马",
+     "en": "Cave Hippo",
+     "page": 3
+    },
+    {
+     "zh": "矿石贩子",
+     "en": "Oremonger",
+     "page": 3
+    },
+    {
+     "zh": "灌木佬",
+     "en": "Bushies",
+     "page": 3
+    },
+    {
+     "zh": "拖肠鬼",
+     "en": "Gut Draggers",
+     "page": 3
+    },
+    {
+     "zh": "地精",
+     "en": "Knoties",
+     "page": 3
+    },
+    {
+     "zh": "木脚",
+     "en": "Lumberfoot",
+     "page": 3
+    },
+    {
+     "zh": "半人",
+     "en": "Half-Man",
+     "page": 3
+    },
+    {
+     "zh": "侏儒",
+     "en": "Gnomes",
+     "page": 3
+    },
+    {
+     "zh": "土豆（两者都疙疙瘩瘩，且都从土里长出来）",
+     "en": "Spuds (Both are lumpy and come from the ground)",
+     "page": 3
+    },
+    {
+     "zh": "矮冬瓜",
+     "en": "stunt",
+     "page": 3
+    },
+    {
+     "zh": "拜金女",
+     "en": "gold digger",
+     "page": 3
+    },
+    {
+     "zh": "舔泥巴的",
+     "en": "dirt-licker",
+     "page": 3
+    },
+    {
+     "zh": "茶壶",
+     "en": "teapot",
+     "page": 3
+    },
+    {
+     "zh": "锤子矮子",
+     "en": "hammer midget",
+     "page": 4
+    },
+    {
+     "zh": "铜器抛光工",
+     "en": "copper polisher",
+     "page": 4
+    },
+    {
+     "zh": "压扁人（长得像被压扁的人类）",
+     "en": "squash (look like squashed humans)",
+     "page": 4
+    },
+    {
+     "zh": "岩苦头",
+     "en": "rock bitter",
+     "page": 4
+    },
+    {
+     "zh": "啃石者",
+     "en": "stone humper",
+     "page": 4
+    },
+    {
+     "zh": "山丘/山地/泥土精灵",
+     "en": "hill/mountain/dirt farie",
+     "page": 4
+    },
+    {
+     "zh": "酒桶肚",
+     "en": "keg belly",
+     "page": 4
+    },
+    {
+     "zh": "嚼黄铁矿的",
+     "en": "pyrite-muncher",
+     "page": 4
+    },
+    {
+     "zh": "巨人的鼻涕",
+     "en": "giant snot",
+     "page": 4
+    },
+    {
+     "zh": "毛茸茸的酿酒坊",
+     "en": "Hairy Brewery",
+     "page": 4
+    }
+   ]
+  },
+  {
+   "key": "elf",
+   "icon": "🍃",
+   "zh": "精灵",
+   "en": "Elves",
+   "entries": [
+    {
+     "zh": "舔叶者",
+     "en": "Leaf lickers",
+     "page": 4
+    },
+    {
+     "zh": "黄油小子",
+     "en": "Butterboys",
+     "page": 4
+    },
+    {
+     "zh": "食蒲公英者",
+     "en": "Dandelion Eater",
+     "page": 4
+    },
+    {
+     "zh": "尖耳朵",
+     "en": "Pointy ears",
+     "page": 5
+    },
+    {
+     "zh": "刀耳",
+     "en": "Knife-ears",
+     "page": 5
+    },
+    {
+     "zh": "尖耳朵",
+     "en": "Sharp ears",
+     "page": 5
+    },
+    {
+     "zh": "中原人",
+     "en": "Chinfolk",
+     "page": 5
+    },
+    {
+     "zh": "无须族",
+     "en": "Beardless",
+     "page": 5
+    },
+    {
+     "zh": "竹竿身材的树性恋",
+     "en": "Pole-proportioned dendrophile",
+     "page": 5
+    },
+    {
+     "zh": "仙灵族",
+     "en": "Fairy Folk",
+     "page": 5
+    },
+    {
+     "zh": "黑暗精灵（对真正的黑暗精灵使用时除外）",
+     "en": "Drow (except to actual drow)",
+     "page": 5
+    },
+    {
+     "zh": "尖耳朵",
+     "en": "Pointy",
+     "page": 5
+    },
+    {
+     "zh": "木头脑袋",
+     "en": "Wood-Heads",
+     "page": 5
+    },
+    {
+     "zh": "花哨小子",
+     "en": "Fancy Lad",
+     "page": 5
+    },
+    {
+     "zh": "树桩敲击者",
+     "en": "Tree-thumpers",
+     "page": 5
+    },
+    {
+     "zh": "匕首头",
+     "en": "Daggar Head",
+     "page": 5
+    },
+    {
+     "zh": "兔子",
+     "en": "Rabbit",
+     "page": 5
+    },
+    {
+     "zh": "基布",
+     "en": "Keeb",
+     "page": 6
+    },
+    {
+     "zh": "吹叶机",
+     "en": "Leafblower",
+     "page": 6
+    },
+    {
+     "zh": "傲慢自大、爱摸树的嬉皮士",
+     "en": "arrogant stuck up tree fondling hippies",
+     "page": 6
+    },
+    {
+     "zh": "抱树者",
+     "en": "tree hugger",
+     "page": 6
+    },
+    {
+     "zh": "小仙子",
+     "en": "pixie",
+     "page": 6
+    },
+    {
+     "zh": "树皮嗅探者",
+     "en": "bark sniffer",
+     "page": 6
+    },
+    {
+     "zh": "左撇子施法者",
+     "en": "left handed casters",
+     "page": 6
+    },
+    {
+     "zh": "道德败类",
+     "en": "waste of immorality",
+     "page": 6
+    },
+    {
+     "zh": "精灵模仿者",
+     "en": "farie wannabes",
+     "page": 6
+    },
+    {
+     "zh": "叮当铃",
+     "en": "tinkerbell",
+     "page": 6
+    },
+    {
+     "zh": "紧身裤（他们太拘谨了）",
+     "en": "wedgie (they're uptight)",
+     "page": 6
+    },
+    {
+     "zh": "无翼精灵•轻量级",
+     "en": "wingless farie •light weights",
+     "page": 6
+    },
+    {
+     "zh": "蘑菇舞者",
+     "en": "mushroom dancers",
+     "page": 6
+    },
+    {
+     "zh": "无信林精",
+     "en": "faithless woodland sprite",
+     "page": 6
+    },
+    {
+     "zh": "饮露者",
+     "en": "dew drinker",
+     "page": 7
+    },
+    {
+     "zh": "妖精杂种",
+     "en": "fey mongrols",
+     "page": 7
+    },
+    {
+     "zh": "打折树精",
+     "en": "discount dryad",
+     "page": 7
+    },
+    {
+     "zh": "雏菊嗅探者",
+     "en": "daisy sniffer",
+     "page": 7
+    },
+    {
+     "zh": "食草者",
+     "en": "weed eater",
+     "page": 7
+    },
+    {
+     "zh": "骨瘦如柴",
+     "en": "bird boned",
+     "page": 7
+    },
+    {
+     "zh": "软泥诱饵（尤其指精灵小孩）",
+     "en": "oozebait (especially elf children)",
+     "page": 7
+    },
+    {
+     "zh": "操树的",
+     "en": "tree f * cker",
+     "page": 7
+    }
+   ]
+  },
+  {
+   "key": "drow",
+   "icon": "🕷️",
+   "zh": "卓尔",
+   "en": "Drow",
+   "entries": [
+    {
+     "zh": "黑水怪",
+     "en": "murker",
+     "page": 7
+    },
+    {
+     "zh": "地底渣滓",
+     "en": "Underscum",
+     "page": 7
+    },
+    {
+     "zh": "污秽之皮",
+     "en": "Filth-Skin",
+     "page": 7
+    },
+    {
+     "zh": "烟囱扫帚",
+     "en": "Chimmney Sweep",
+     "page": 7
+    },
+    {
+     "zh": "穴居野人",
+     "en": "Cavemen",
+     "page": 7
+    },
+    {
+     "zh": "灰脸",
+     "en": "Ash-Face",
+     "page": 8
+    },
+    {
+     "zh": "高个矮人",
+     "en": "tall dwarfs",
+     "page": 8
+    },
+    {
+     "zh": "泥巴精灵",
+     "en": "dirt elves",
+     "page": 8
+    },
+    {
+     "zh": "舔苔者",
+     "en": "moss licker",
+     "page": 8
+    },
+    {
+     "zh": "蜘蛛之吻",
+     "en": "Spider Kisser",
+     "page": 8
+    },
+    {
+     "zh": "矮人冒牌货",
+     "en": "dwarven imposter",
+     "page": 8
+    }
+   ]
+  },
+  {
+   "key": "halfelf",
+   "icon": "🧝",
+   "zh": "半精灵",
+   "en": "Half-Elves",
+   "entries": [
+    {
+     "zh": "杂种",
+     "en": "Mongrels",
+     "page": 8
+    },
+    {
+     "zh": "野种",
+     "en": "Bastards",
+     "page": 8
+    },
+    {
+     "zh": "混血",
+     "en": "Half Breed",
+     "page": 8
+    },
+    {
+     "zh": "情绪血脉者",
+     "en": "Moodbloods",
+     "page": 8
+    },
+    {
+     "zh": "半血",
+     "en": "Half Bad",
+     "page": 9
+    },
+    {
+     "zh": "蜉蝣崽",
+     "en": "Mayfly Babies",
+     "page": 9
+    },
+    {
+     "zh": "野种娃",
+     "en": "Fling Kids",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    },
+    {
+     "zh": "叛徒崽子",
+     "en": "Traitor Babies",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    },
+    {
+     "zh": "半好种",
+     "en": "Half Good",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    },
+    {
+     "zh": "杂种",
+     "en": "Mutts",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    },
+    {
+     "zh": "骡子",
+     "en": "Mules",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    },
+    {
+     "zh": "不够",
+     "en": "Not Enough",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    },
+    {
+     "zh": "半途",
+     "en": "Halfways",
+     "page": 9,
+     "by": "人类用来骂半精灵"
+    }
+   ]
+  },
+  {
+   "key": "halfling",
+   "icon": "🍺",
+   "zh": "半身人",
+   "en": "Halflings",
+   "entries": [
+    {
+     "zh": "毛茸茸的门挡",
+     "en": "Hairy doorstop",
+     "page": 9
+    },
+    {
+     "zh": "山丘地精",
+     "en": "Hill goblin",
+     "page": 9
+    },
+    {
+     "zh": "无毛矮人",
+     "en": "Hairless Dwarf",
+     "page": 9
+    },
+    {
+     "zh": "皮足",
+     "en": "Leatherfoot",
+     "page": 10
+    },
+    {
+     "zh": "儿童",
+     "en": "Children",
+     "page": 10
+    },
+    {
+     "zh": "矮人崽",
+     "en": "Dwarfling",
+     "page": 10
+    },
+    {
+     "zh": "地精",
+     "en": "Gnome",
+     "page": 10
+    },
+    {
+     "zh": "剃须矮人",
+     "en": "Shaved Dwarf",
+     "page": 10
+    },
+    {
+     "zh": "潜行者",
+     "en": "Sneakies",
+     "page": 10
+    },
+    {
+     "zh": "吸灵者",
+     "en": "Succling",
+     "page": 10
+    },
+    {
+     "zh": "咬脚踝的矮子",
+     "en": "Ankle Biter",
+     "page": 10
+    },
+    {
+     "zh": "猪猡",
+     "en": "Swine",
+     "page": 10
+    },
+    {
+     "zh": "半人",
+     "en": "Half men",
+     "page": 10
+    },
+    {
+     "zh": "矮矬子",
+     "en": "Dire-Midged",
+     "page": 10
+    },
+    {
+     "zh": "比尔博",
+     "en": "Bilbo",
+     "page": 10
+    },
+    {
+     "zh": "小不点",
+     "en": "Runt",
+     "page": 10
+    },
+    {
+     "zh": "扶手",
+     "en": "Arm rest",
+     "page": 10
+    },
+    {
+     "zh": "手脚不干净",
+     "en": "sticky fingers",
+     "page": 11
+    },
+    {
+     "zh": "小不点",
+     "en": "small fry",
+     "page": 11
+    },
+    {
+     "zh": "霍比特人",
+     "en": "hobbit",
+     "page": 11
+    },
+    {
+     "zh": "舔胫者",
+     "en": "shin licker",
+     "page": 11
+    },
+    {
+     "zh": "自助餐",
+     "en": "all-you-can-eat",
+     "page": 11
+    },
+    {
+     "zh": "妖精巨人",
+     "en": "fairy giant",
+     "page": 11
+    }
+   ]
+  },
+  {
+   "key": "human",
+   "icon": "👤",
+   "zh": "人类",
+   "en": "Humans",
+   "entries": [
+    {
+     "zh": "软皮怪（蜥蜴人用语）",
+     "en": "Soft one (from lizardfolk)",
+     "page": 11
+    },
+    {
+     "zh": "圆耳朵",
+     "en": "Round ears",
+     "page": 11
+    },
+    {
+     "zh": "粉红玩意儿",
+     "en": "Pink Thing",
+     "page": 11
+    },
+    {
+     "zh": "蜉蝣",
+     "en": "Mayfly",
+     "page": 11
+    },
+    {
+     "zh": "粉皮",
+     "en": "Pinks",
+     "page": 11
+    },
+    {
+     "zh": "灰烬",
+     "en": "Dust",
+     "page": 11
+    },
+    {
+     "zh": "勺耳",
+     "en": "Spoon-Ears",
+     "page": 11
+    },
+    {
+     "zh": "普通人",
+     "en": "Normie",
+     "page": 12
+    },
+    {
+     "zh": "短命鬼",
+     "en": "Short-life",
+     "page": 12
+    },
+    {
+     "zh": "粉皮佬",
+     "en": "pink-skin",
+     "page": 12
+    },
+    {
+     "zh": "张三李四",
+     "en": "Joe Bloggs",
+     "page": 12
+    },
+    {
+     "zh": "通用主角#435（如果是玩家角色）",
+     "en": "generic protag #435 (if a PC)",
+     "page": 12
+    },
+    {
+     "zh": "满崽",
+     "en": "Full-lings",
+     "page": 12
+    },
+    {
+     "zh": "光滑皮",
+     "en": "Smoothskin",
+     "page": 12
+    },
+    {
+     "zh": "吸奶崽",
+     "en": "Succling",
+     "page": 12
+    },
+    {
+     "zh": "猪猡",
+     "en": "Swine",
+     "page": 12
+    },
+    {
+     "zh": "叛徒（指长期与龙裔厮混的人类）",
+     "en": "Quisling (a human who spends a lot of time around a dragonborn)",
+     "page": 12
+    },
+    {
+     "zh": "凶蛮半身人",
+     "en": "Dire Halfling",
+     "page": 12
+    },
+    {
+     "zh": "木脚",
+     "en": "Lumberfoot",
+     "page": 12
+    },
+    {
+     "zh": "猪皮",
+     "en": "Pig Skin",
+     "page": 12
+    },
+    {
+     "zh": "短命鬼",
+     "en": "Shortlived",
+     "page": 12
+    },
+    {
+     "zh": "猴子",
+     "en": "Monkeys",
+     "page": 13
+    },
+    {
+     "zh": "加倍（半身人用语）",
+     "en": "Doubling (by Halflings)",
+     "page": 13
+    },
+    {
+     "zh": "世界之疫（精灵用语）",
+     "en": "World-blight (by elves)",
+     "page": 13
+    },
+    {
+     "zh": "伐木者（精灵用语）",
+     "en": "Tree-killers (by elves)",
+     "page": 13
+    },
+    {
+     "zh": "猴子",
+     "en": "Monkey",
+     "page": 13
+    },
+    {
+     "zh": "粗鄙的精灵",
+     "en": "graceless elf",
+     "page": 13
+    },
+    {
+     "zh": "兔崽子（从精灵视角出发，因其繁殖速度在他们看来极快）",
+     "en": "them)",
+     "page": 13
+    },
+    {
+     "zh": "奶皮子（兽人对人类的蔑称）",
+     "en": "milkskins (orcs on humans)",
+     "page": 13
+    },
+    {
+     "zh": "婊子种族（他们是混血种诞生的根源）",
+     "en": "whore-race (they're the reason for half breeds)",
+     "page": 13
+    },
+    {
+     "zh": "牲口",
+     "en": "Cattle",
+     "page": 13
+    },
+    {
+     "zh": "凡人",
+     "en": "Morties",
+     "page": 13
+    },
+    {
+     "zh": "圆牙",
+     "en": "roundteeth",
+     "page": 13
+    }
+   ]
+  },
+  {
+   "key": "dragonborn",
+   "icon": "🐲",
+   "zh": "龙裔",
+   "en": "Dragonborns",
+   "entries": [
+    {
+     "zh": "蜥蜴",
+     "en": "Lizard",
+     "page": 13
+    },
+    {
+     "zh": "食蝇者",
+     "en": "Fly eater",
+     "page": 14
+    },
+    {
+     "zh": "伪龙",
+     "en": "Fake-drakes",
+     "page": 14
+    },
+    {
+     "zh": "高大的狗头人",
+     "en": "Tall Kobold",
+     "page": 14
+    },
+    {
+     "zh": "装模作样的鬣蜥",
+     "en": "Iguana Wannabe",
+     "page": 14
+    },
+    {
+     "zh": "蛇皮",
+     "en": "Snakeskin",
+     "page": 14
+    },
+    {
+     "zh": "装模作样的幼龙",
+     "en": "Wyrm Wannabe",
+     "page": 14
+    },
+    {
+     "zh": "鳞族",
+     "en": "Scalie",
+     "page": 14
+    },
+    {
+     "zh": "靴子",
+     "en": "Boot",
+     "page": 14
+    },
+    {
+     "zh": "鳞背",
+     "en": "Scalebacks",
+     "page": 14
+    },
+    {
+     "zh": "鳞片",
+     "en": "Scales",
+     "page": 14
+    },
+    {
+     "zh": "蜥蜴脑",
+     "en": "Lizard Brain",
+     "page": 14
+    },
+    {
+     "zh": "行走的钱袋",
+     "en": "Walking Purse",
+     "page": 14
+    },
+    {
+     "zh": "蜥蜴仔",
+     "en": "Skinks",
+     "page": 14
+    },
+    {
+     "zh": "食人魔",
+     "en": "Man-Eater",
+     "page": 14
+    },
+    {
+     "zh": "蜥蜴人",
+     "en": "Lizardfolk",
+     "page": 15
+    },
+    {
+     "zh": "分叉舌",
+     "en": "Forked-Tongues",
+     "page": 15
+    },
+    {
+     "zh": "龙渣",
+     "en": "dragon refuse",
+     "page": 15
+    },
+    {
+     "zh": "蝾螈",
+     "en": "newt",
+     "page": 15
+    },
+    {
+     "zh": "壁虎",
+     "en": "Gecko",
+     "page": 15
+    },
+    {
+     "zh": "劣龙弃物",
+     "en": "wyrm reject",
+     "page": 15
+    },
+    {
+     "zh": "大蜥蜴",
+     "en": "overgrown iguana",
+     "page": 15
+    }
+   ]
+  },
+  {
+   "key": "gnome",
+   "icon": "⚙️",
+   "zh": "侏儒",
+   "en": "Gnomes",
+   "entries": [
+    {
+     "zh": "半身人",
+     "en": "Quarterling",
+     "page": 15
+    },
+    {
+     "zh": "舔膝者",
+     "en": "KneeLicker",
+     "page": 15
+    },
+    {
+     "zh": "小精灵",
+     "en": "Mini-elf",
+     "page": 15
+    },
+    {
+     "zh": "半身人",
+     "en": "Halfling",
+     "page": 15
+    },
+    {
+     "zh": "蘑菇吸食者",
+     "en": "Mushroom sucker",
+     "page": 16
+    },
+    {
+     "zh": "矮脚狗",
+     "en": "Ankle Biter",
+     "page": 16
+    },
+    {
+     "zh": "胖仙子",
+     "en": "Fat Fairy",
+     "page": 16
+    },
+    {
+     "zh": "嗅探者",
+     "en": "Sniffers",
+     "page": 16
+    },
+    {
+     "zh": "叮当小矮人",
+     "en": "Tinkertots",
+     "page": 16
+    },
+    {
+     "zh": "草坪装饰品",
+     "en": "Lawn ornaments",
+     "page": 16
+    },
+    {
+     "zh": "小眼矮墩子",
+     "en": "Bug-Eyed Stumps",
+     "page": 16
+    },
+    {
+     "zh": "剃毛地精",
+     "en": "Shaved Hobgoblin",
+     "page": 16
+    },
+    {
+     "zh": "幻术耍子",
+     "en": "Glamer-slingers",
+     "page": 16
+    },
+    {
+     "zh": "矮崽子",
+     "en": "Dwarflings",
+     "page": 16
+    },
+    {
+     "zh": "骗子",
+     "en": "Trickster",
+     "page": 16
+    },
+    {
+     "zh": "打折矮人",
+     "en": "discount dwarf",
+     "page": 16
+    },
+    {
+     "zh": "锥子头",
+     "en": "cone head",
+     "page": 16
+    },
+    {
+     "zh": "草坪飞镖",
+     "en": "lawn darts",
+     "page": 16
+    }
+   ]
+  },
+  {
+   "key": "orc",
+   "icon": "🪓",
+   "zh": "半兽人 / 兽人",
+   "en": "Half-orcs / Orcs",
+   "entries": [
+    {
+     "zh": "沼泽皮",
+     "en": "Swampskin",
+     "page": 17
+    },
+    {
+     "zh": "獠牙脸",
+     "en": "Tusk-Face",
+     "page": 17
+    },
+    {
+     "zh": "绿皮",
+     "en": "Greenskins",
+     "page": 17
+    },
+    {
+     "zh": "粘皮怪",
+     "en": "Slimeskin",
+     "page": 17
+    },
+    {
+     "zh": "兽人·麦克兽人面（这条是匿名添加的）",
+     "en": "Orcy McOrcface (the person who added this one did it anonomously)",
+     "page": 17
+    },
+    {
+     "zh": "半兽杂种",
+     "en": "Dorc",
+     "page": 17
+    },
+    {
+     "zh": "半兽人猪",
+     "en": "Forc",
+     "page": 17
+    },
+    {
+     "zh": "死灵吐息",
+     "en": "Necro-Breath",
+     "page": 17
+    },
+    {
+     "zh": "猪脸",
+     "en": "Pig-Face",
+     "page": 17
+    },
+    {
+     "zh": "獠牙种",
+     "en": "Tuskers",
+     "page": 17
+    },
+    {
+     "zh": "咕噜兽",
+     "en": "Grunt",
+     "page": 17
+    },
+    {
+     "zh": "渣滓种",
+     "en": "Scumbreed",
+     "page": 17
+    },
+    {
+     "zh": "混血杂种",
+     "en": "Halfbreed",
+     "page": 17
+    },
+    {
+     "zh": "笨脚怪",
+     "en": "Lumberfoot",
+     "page": 18
+    },
+    {
+     "zh": "绿皮兽（泛指）",
+     "en": "The green beast (referring collectively)",
+     "page": 18
+    },
+    {
+     "zh": "野蛮人",
+     "en": "Savages",
+     "page": 18
+    },
+    {
+     "zh": "绿皮猿",
+     "en": "green ape",
+     "page": 18
+    },
+    {
+     "zh": "西兰花头",
+     "en": "broccoli head",
+     "page": 18
+    }
+   ]
+  },
+  {
+   "key": "tiefling",
+   "icon": "😈",
+   "zh": "提夫林",
+   "en": "Tieflings",
+   "entries": [
+    {
+     "zh": "食人魔粪便",
+     "en": "ogre droppings",
+     "page": 18
+    },
+    {
+     "zh": "恶魔孽种",
+     "en": "Devil spawn",
+     "page": 18
+    },
+    {
+     "zh": "畸形怪胎",
+     "en": "Sideshow",
+     "page": 18
+    },
+    {
+     "zh": "恶魔杂种",
+     "en": "Devil bastard",
+     "page": 18
+    },
+    {
+     "zh": "地狱孽种",
+     "en": "Hellspawn",
+     "page": 18
+    },
+    {
+     "zh": "亮眼仔",
+     "en": "Brighteyes",
+     "page": 18
+    },
+    {
+     "zh": "石像鬼",
+     "en": "Gargoyles",
+     "page": 18
+    },
+    {
+     "zh": "牛头怪",
+     "en": "Bullheads",
+     "page": 18
+    },
+    {
+     "zh": "半地狱",
+     "en": "Half-Hells",
+     "page": 19
+    },
+    {
+     "zh": "瘟疫",
+     "en": "Pox",
+     "page": 19
+    },
+    {
+     "zh": "恶魔之子",
+     "en": "Demon Child",
+     "page": 19
+    },
+    {
+     "zh": "触角头",
+     "en": "Handle Heads",
+     "page": 19
+    },
+    {
+     "zh": "蹄声",
+     "en": "Clip-Clops",
+     "page": 19
+    },
+    {
+     "zh": "羊脸怪",
+     "en": "Goat Face",
+     "page": 19
+    },
+    {
+     "zh": "不可爱者（源自恶魔）",
+     "en": "Unloveables (from Demons)",
+     "page": 19
+    },
+    {
+     "zh": "怪胎",
+     "en": "Freak",
+     "page": 19
+    },
+    {
+     "zh": "残次品",
+     "en": "Failbirth",
+     "page": 19
+    },
+    {
+     "zh": "污秽",
+     "en": "Filth",
+     "page": 19
+    },
+    {
+     "zh": "未生",
+     "en": "Unbirth",
+     "page": 19
+    },
+    {
+     "zh": "地狱之触",
+     "en": "Hell-touched",
+     "page": 19
+    },
+    {
+     "zh": "污秽之裔",
+     "en": "Tainted Ones",
+     "page": 19
+    },
+    {
+     "zh": "高个魔童",
+     "en": "Tall Imps",
+     "page": 19
+    }
+   ]
+  },
+  {
+   "key": "aasimar",
+   "icon": "🕊️",
+   "zh": "阿斯莫",
+   "en": "Aasimar",
+   "entries": [
+    {
+     "zh": "神明的宠物",
+     "en": "God's Pet",
+     "page": 20
+    },
+    {
+     "zh": "假正经的乖宝宝",
+     "en": "Goody Two Shoes",
+     "page": 21
+    },
+    {
+     "zh": "无翼的凡胎杂种",
+     "en": "Wingless Earthbound bastard Half breed",
+     "page": 21
+    },
+    {
+     "zh": "鸟人",
+     "en": "Birdy",
+     "page": 21
+    },
+    {
+     "zh": "鸡脑袋",
+     "en": "Chickenbrain",
+     "page": 21
+    },
+    {
+     "zh": "小鸡",
+     "en": "Chicken",
+     "page": 21
+    }
+   ]
+  },
+  {
+   "key": "kenku",
+   "icon": "🐦",
+   "zh": "天狗",
+   "en": "Kenku",
+   "entries": [
+    {
+     "zh": "乌鸦",
+     "en": "crow",
+     "page": 20
+    },
+    {
+     "zh": "乌鸦",
+     "en": "raven",
+     "page": 20
+    },
+    {
+     "zh": "鹦鹉（用于热带/港口城市）",
+     "en": "parrot (in tropical/port cities)",
+     "page": 20
+    },
+    {
+     "zh": "无翼者",
+     "en": "Flightless",
+     "page": 20
+    },
+    {
+     "zh": "空骨",
+     "en": "Hollowbones",
+     "page": 20
+    },
+    {
+     "zh": "喧闹者",
+     "en": "Noisemakers",
+     "page": 20
+    },
+    {
+     "zh": "模仿鸟",
+     "en": "Mockingbirds",
+     "page": 20
+    },
+    {
+     "zh": "呱呱鸦",
+     "en": "Caw-Caws",
+     "page": 20
+    },
+    {
+     "zh": "啄木鸟",
+     "en": "Peckers",
+     "page": 20
+    },
+    {
+     "zh": "学舌精",
+     "en": "Copycats",
+     "page": 20
+    },
+    {
+     "zh": "粗鄙之语",
+     "en": "Jabbers",
+     "page": 20
+    }
+   ]
+  },
+  {
+   "key": "aarakocra",
+   "icon": "🪶",
+   "zh": "阿兰寇拉人",
+   "en": "Aarakocra",
+   "entries": [
+    {
+     "zh": "天使面孔",
+     "en": "Angel Face",
+     "page": 21
+    },
+    {
+     "zh": "乌鸦",
+     "en": "crow",
+     "page": 21
+    },
+    {
+     "zh": "渡鸦",
+     "en": "raven",
+     "page": 21
+    },
+    {
+     "zh": "鹦鹉（用于热带/港口城市）",
+     "en": "parrot (in tropical/port cities)",
+     "page": 21
+    },
+    {
+     "zh": "空骨者",
+     "en": "Hollowbones",
+     "page": 21
+    },
+    {
+     "zh": "鸟人",
+     "en": "Bird-Man",
+     "page": 21
+    },
+    {
+     "zh": "鸽子",
+     "en": "Pigeon",
+     "page": 21
+    },
+    {
+     "zh": "呱呱鸟",
+     "en": "Caw-Caws",
+     "page": 21
+    },
+    {
+     "zh": "鳞皮侏儒",
+     "en": "Scaly Gnomes",
+     "page": 22
+    },
+    {
+     "zh": "小蜥蜴人",
+     "en": "Little Lizardfolk",
+     "page": 22
+    },
+    {
+     "zh": "叽喳鬼",
+     "en": "Yippers",
+     "page": 22
+    },
+    {
+     "zh": "饥奴",
+     "en": "hunger slave",
+     "page": 22
+    },
+    {
+     "zh": "杂种狗",
+     "en": "mutt",
+     "page": 22
+    },
+    {
+     "zh": "野狗",
+     "en": "cur",
+     "page": 22
+    },
+    {
+     "zh": "狗",
+     "en": "Dog",
+     "page": 22
+    },
+    {
+     "zh": "食腐者",
+     "en": "Carrion-eaters",
+     "page": 22
+    }
+   ]
+  },
+  {
+   "key": "gnoll",
+   "icon": "🐺",
+   "zh": "豺狼人",
+   "en": "Gnoll",
+   "entries": [
+    {
+     "zh": "废铁疙瘩",
+     "en": "Hunk of Junk",
+     "page": 23
+    },
+    {
+     "zh": "柠檬",
+     "en": "Lemon",
+     "page": 23
+    },
+    {
+     "zh": "魔像",
+     "en": "Golems",
+     "page": 23
+    },
+    {
+     "zh": "会走路的工具",
+     "en": "Walking talking tools",
+     "page": 23
+    },
+    {
+     "zh": "假人（指训练/靶子假人）",
+     "en": "Dummies (as in training/target dummy)",
+     "page": 23
+    },
+    {
+     "zh": "稻草人",
+     "en": "Scarecrows",
+     "page": 23
+    },
+    {
+     "zh": "人偶",
+     "en": "Dolls",
+     "page": 23
+    },
+    {
+     "zh": "牵线木偶/提线傀儡",
+     "en": "Marionettes / Puppets",
+     "page": 23
+    },
+    {
+     "zh": "定制款（我的变形金刚漫画粉在哪儿？）",
+     "en": "Made-to-Orders (where my Transformers comics fans at?)",
+     "page": 23
+    },
+    {
+     "zh": "假货/仿冒品",
+     "en": "Fakes / Facsimiles",
+     "page": 23
+    },
+    {
+     "zh": "行走的棺材",
+     "en": "Walking Casket",
+     "page": 23
+    },
+    {
+     "zh": "锈铁桶",
+     "en": "rust bucket",
+     "page": 23
+    },
+    {
+     "zh": "齿轮脑袋",
+     "en": "gear head",
+     "page": 23
+    },
+    {
+     "zh": "废铁堆",
+     "en": "scrap heap",
+     "page": 23
+    }
+   ]
+  },
+  {
+   "key": "kobold",
+   "icon": "🦎",
+   "zh": "狗头人",
+   "en": "Kobolds",
+   "entries": [
+    {
+     "zh": "锈铁块",
+     "en": "Rusties",
+     "page": 22
+    },
+    {
+     "zh": "叮叮当当、哐啷作响、乌漆嘛黑的破烂堆（某人就是喜欢押韵哈哈）",
+     "en": "alliteration haha)",
+     "page": 22
+    },
+    {
+     "zh": "蠢铁砧",
+     "en": "Dumbells",
+     "page": 22
+    }
+   ]
+  },
+  {
+   "key": "genasi",
+   "icon": "🔥",
+   "zh": "元素裔",
+   "en": "Genasi",
+   "entries": [
+    {
+     "zh": "魔像（它们是活体构造体）",
+     "en": "golem (they're living constructs)",
+     "page": 24
+    },
+    {
+     "zh": "机器人",
+     "en": "robot",
+     "page": 24
+    },
+    {
+     "zh": "冷心",
+     "en": "Cold Heart",
+     "page": 24,
+     "by": "元素：火焰"
+    },
+    {
+     "zh": "火柴",
+     "en": "Matchstick",
+     "page": 24,
+     "by": "元素：火焰"
+    },
+    {
+     "zh": "危险品",
+     "en": "Hazard",
+     "page": 24,
+     "by": "元素：火焰"
+    },
+    {
+     "zh": "晒伤",
+     "en": "Sunburn",
+     "page": 24,
+     "by": "元素：火焰"
+    },
+    {
+     "zh": "碎石床",
+     "en": "Gravel bed",
+     "page": 24,
+     "by": "元素：大地"
+    },
+    {
+     "zh": "沉积岩",
+     "en": "Sedimentary",
+     "page": 24,
+     "by": "元素：大地"
+    },
+    {
+     "zh": "石板",
+     "en": "Slabs",
+     "page": 24,
+     "by": "元素：大地"
+    },
+    {
+     "zh": "吹叶机",
+     "en": "Leaf Blower",
+     "page": 24,
+     "by": "元素：空气"
+    },
+    {
+     "zh": "火花塞",
+     "en": "Spark Plug",
+     "page": 25,
+     "by": "元素：空气"
+    },
+    {
+     "zh": "不讨喜的屁（出自兽人。兽人不擅长阴阳怪气）",
+     "en": "Unfavorable Fart (From Orcs. Orcs aren't great at throwing shade)",
+     "page": 25,
+     "by": "元素：空气"
+    },
+    {
+     "zh": "吹牛大王",
+     "en": "Windbags",
+     "page": 25,
+     "by": "元素：水"
+    },
+    {
+     "zh": "藻类丛生",
+     "en": "Algae Infested",
+     "page": 25,
+     "by": "元素：水"
+    },
+    {
+     "zh": "咸的",
+     "en": "Salty",
+     "page": 25,
+     "by": "元素：水"
+    }
+   ]
+  },
+  {
+   "key": "goblin",
+   "icon": "👺",
+   "zh": "地精",
+   "en": "Goblins",
+   "entries": [
+    {
+     "zh": "泡头",
+     "en": "Soakhead",
+     "page": 25
+    },
+    {
+     "zh": "绿皮",
+     "en": "Greenskin",
+     "page": 25
+    },
+    {
+     "zh": "地精",
+     "en": "Gobber",
+     "page": 25
+    },
+    {
+     "zh": "黏皮怪",
+     "en": "Slimeskin",
+     "page": 25
+    },
+    {
+     "zh": "垃圾侏儒",
+     "en": "Trash Gnome",
+     "page": 25
+    },
+    {
+     "zh": "兽人奴隶",
+     "en": "Orcslave",
+     "page": 25
+    },
+    {
+     "zh": "牙签鼻",
+     "en": "Toothpick-Nose",
+     "page": 25
+    },
+    {
+     "zh": "流浪猫",
+     "en": "Fleabag",
+     "page": 26
+    },
+    {
+     "zh": "毛球",
+     "en": "Hairball",
+     "page": 26
+    },
+    {
+     "zh": "猫",
+     "en": "Cat",
+     "page": 26
+    },
+    {
+     "zh": "虫窝",
+     "en": "Worm farm",
+     "page": 26
+    }
+   ]
+  },
+  {
+   "key": "firbolg",
+   "icon": "🌲",
+   "zh": "菲尔伯格人",
+   "en": "Firbolg",
+   "entries": [
+    {
+     "zh": "小巨人",
+     "en": "Mini-Giant",
+     "page": 27
+    },
+    {
+     "zh": "部落小子",
+     "en": "Tribal Boy",
+     "page": 27
+    },
+    {
+     "zh": "石肤",
+     "en": "Stoneskin",
+     "page": 27
+    }
+   ]
+  },
+  {
+   "key": "triton",
+   "icon": "🔱",
+   "zh": "鱼人",
+   "en": "Triton",
+   "entries": [
+    {
+     "zh": "巨人杂种",
+     "en": "Giant Half-Breed",
+     "page": 26
+    },
+    {
+     "zh": "长歪的矮子",
+     "en": "Overgrown Dwarf",
+     "page": 26
+    },
+    {
+     "zh": "半吊子巨人",
+     "en": "Half-Baked Goliath",
+     "page": 26
+    }
+   ]
+  },
+  {
+   "key": "tabaxi",
+   "icon": "🐈",
+   "zh": "猫人",
+   "en": "Tabaxi",
+   "entries": [
+    {
+     "zh": "操鱼的",
+     "en": "fish f * cker",
+     "page": 26
+    },
+    {
+     "zh": "海豚生的",
+     "en": "Dolphin born",
+     "page": 26
+    },
+    {
+     "zh": "湿毯子",
+     "en": "Wet blanket",
+     "page": 26
+    },
+    {
+     "zh": "食珊瑚者",
+     "en": "Coral Eater",
+     "page": 26
+    }
+   ]
+  },
+  {
+   "key": "giant",
+   "icon": "🗿",
+   "zh": "巨人",
+   "en": "Giants",
+   "entries": [
+    {
+     "zh": "高塔墩（高得像座塔，但更容易被推倒）",
+     "en": "Tumbletower (tall like a tower, but more easy to knock down)",
+     "page": 27
+    },
+    {
+     "zh": "巢发（鸟类倾向于在高处筑巢）",
+     "en": "Nesthair (birds tend to nest in high places)",
+     "page": 27
+    }
+   ]
+  },
+  {
+   "key": "centaur",
+   "icon": "🐎",
+   "zh": "人马",
+   "en": "Centuars",
+   "entries": [
+    {
+     "zh": "嗒嗒蹄声",
+     "en": "Clippity-Clops",
+     "page": 27
+    },
+    {
+     "zh": "马杂种",
+     "en": "Horse Bastards",
+     "page": 27
+    },
+    {
+     "zh": "半马人",
+     "en": "Half-Horses",
+     "page": 27
+    }
+   ]
+  },
+  {
+   "key": "misc",
+   "icon": "🧩",
+   "zh": "跨种族用语",
+   "en": "Cross-race slurs",
+   "entries": [
+    {
+     "zh": "陆地行者",
+     "en": "Landwalker",
+     "page": 1,
+     "by": "针对所有非水生种族（陆生各族）"
+    },
+    {
+     "zh": "溺亡者",
+     "en": "Drowner",
+     "page": 1,
+     "by": "针对所有非水生种族（陆生各族）"
+    },
+    {
+     "zh": "陆地居民",
+     "en": "Landdweller",
+     "page": 1,
+     "by": "针对所有非水生种族（陆生各族）"
+    },
+    {
+     "zh": "用嘴呼吸的蠢货",
+     "en": "Mouth-breather",
+     "page": 1,
+     "by": "针对所有非水生种族（陆生各族）"
+    },
+    {
+     "zh": "伊布利斯（意为粪便）",
+     "en": "Iblith (meaning excrement)",
+     "page": 8,
+     "by": "针对所有非卓尔精灵者"
+    },
+    {
+     "zh": "曼斯雷基",
+     "en": "maunthreki",
+     "page": 15,
+     "by": "针对所有非龙裔者"
+    }
+   ]
+  }
+ ],
+ "appendix": [],
+ "sectionNotes": [],
+ "stray": []
+};
+</script>
+<script>
+(function(){
+  var DATA = window.DND_DATA || {groups:[],appendix:[],intro:[],meta:{}};
+  var $ = function(s){return document.querySelector(s)};
+  var main = $('#main'), chips = $('#chips'), q = $('#q'), clearBtn = $('#clear'), foot = $('#foot');
+  var FAV_KEY = 'dnd_slur_favs_v1';
+  var favs = new Set();
+  try { favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]')); } catch(e){}
+  var active = 'all';
+
+  function saveFavs(){ try{ localStorage.setItem(FAV_KEY, JSON.stringify([...favs])); }catch(e){} }
+  function toast(msg){
+    var t = $('#toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove('on'); }, 1400);
+  }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function hl(s, term){
+    s = esc(s);
+    if(!term) return s;
+    try{
+      var re = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+      return s.replace(re, '<mark>$1</mark>');
+    }catch(e){ return s; }
+  }
+  var key = function(e){ return (e.zh + '|' + e.en).toLowerCase(); };
+
+  /* ---------- chips ---------- */
+  function buildChips(){
+    var html = '<button class="chip on" data-g="all">全部 ' + DATA.meta.counts.entries + '</button>';
+    html += '<button class="chip" data-g="__fav">★ 收藏</button>';
+    DATA.groups.forEach(function(g){
+      html += '<button class="chip" data-g="' + g.key + '">' + g.icon + ' ' + esc(g.zh) + '</button>';
+    });
+    chips.innerHTML = html;
+    chips.addEventListener('click', function(ev){
+      var b = ev.target.closest('.chip'); if(!b) return;
+      active = b.dataset.g;
+      [...chips.querySelectorAll('.chip')].forEach(function(c){ c.classList.toggle('on', c === b); });
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  /* ---------- render ---------- */
+  function render(){
+    var term = q.value.trim();
+    var groups = DATA.groups.slice();
+    if(active === '__fav'){
+      groups = groups.map(function(g){
+        return Object.assign({}, g, { entries: g.entries.filter(function(e){ return favs.has(key(e)); }) });
+      }).filter(function(g){ return g.entries.length; });
+      if(!groups.length){ main.innerHTML = emptyBox('★','还没有收藏','点词条右侧的星标，把常用的几条钉在这里'); return; }
+    }
+    if(active !== 'all' && active !== '__fav') groups = groups.filter(function(g){ return g.key === active; });
+    if(term){
+      var t = term.toLowerCase();
+      groups = groups.map(function(g){
+        return Object.assign({}, g, {
+          entries: g.entries.filter(function(e){
+            return (e.zh && e.zh.toLowerCase().indexOf(t) >= 0) || (e.en && e.en.toLowerCase().indexOf(t) >= 0);
+          })
+        });
+      }).filter(function(g){ return g.entries.length; });
+    }
+
+    var total = groups.reduce(function(a,g){ return a + g.entries.length; }, 0);
+    if(!total){
+      main.innerHTML = emptyBox('?','没有匹配的词条','换个关键词试试，中文和英文都能搜');
+      return;
+    }
+    var html = '';
+    html += introBlock(term);
+    groups.forEach(function(g){
+      html += '<section class="group" id="g-' + g.key + '">';
+      html += '<div class="ghead"><span class="ic">' + g.icon + '</span>' +
+              '<span class="zh">' + esc(g.zh) + '</span>' +
+              '<span class="en">' + esc(g.en) + '</span>' +
+              '<span class="n">' + g.entries.length + '</span></div><ul>';
+      g.entries.forEach(function(e){
+        var k = key(e), on = favs.has(k);
+        html += '<li data-k="' + esc(k) + '"><div class="txt">' +
+                '<div class="zh">' + hl(e.zh, term) + '</div>' +
+                '<div class="en">' + hl(e.en, term) + '</div>' +
+                (e.by || e.sub ? '<span class="sub">' + esc(e.by || e.sub) + '</span>' : '') +
+                '</div><button class="star' + (on ? ' on' : '') + '" aria-label="收藏">' + (on ? '★' : '☆') + '</button></li>';
+      });
+      html += '</ul></section>';
+    });
+    if(DATA.appendix && DATA.appendix.length) html += appendixBlock(term);
+    main.innerHTML = html;
+  }
+  function emptyBox(icon, title, sub){
+    return '<div class="empty"><b>' + icon + '</b>' + esc(title) + '<div style="margin-top:6px">' + esc(sub) + '</div></div>';
+  }
+  function introBlock(term){
+    if(term || active !== 'all' || !DATA.intro || !DATA.intro.length) return '';
+    return '<details class="note"><summary>关于这份清单（来自原 PDF 前言）</summary><div class="body">' +
+           DATA.intro.map(esc).join('\n') + '</div></details>';
+  }
+  function appendixBlock(term){
+    // appendix lines look like:  *中文说明 "英文说法" *English note "the slur"
+    var items = DATA.appendix.map(function(a){
+      var t = a.text || '';
+      var zh = '', en = '';
+      var m = /^\*\s*([^"*]*?"[^"]*")\s*\*(.*)$/.exec(t);
+      if (m) { zh = m[1].trim(); en = m[2].trim(); }
+      else if (/^告示/.test(t)) { zh = t; }
+      else en = t;
+      var block = '<div class="apx">';
+      if (zh) block += '<div class="apx-zh">' + hl(zh, term) + '</div>';
+      if (en) block += '<div class="apx-en">' + hl(en, term) + '</div>';
+      block += '<span class="sub">' + esc(a.section) + ' · 第 ' + a.page + ' 页</span></div>';
+      return block;
+    }).join('');
+    return '<details class="note"><summary>附录 · 间接种族侮辱与告示（' + DATA.appendix.length + '）</summary><div class="body">' + items + '</div></details>';
+  }
+
+  /* ---------- events ---------- */
+  var t0 = null;
+  q.addEventListener('input', function(){
+    clearBtn.classList.toggle('on', !!q.value);
+    clearTimeout(t0); t0 = setTimeout(render, 90);
+  });
+  clearBtn.addEventListener('click', function(){ q.value = ''; clearBtn.classList.remove('on'); render(); q.focus(); });
+  main.addEventListener('click', function(ev){
+    var s = ev.target.closest('.star'); if(!s) return;
+    var li = s.closest('li'), k = li.dataset.k;
+    if(favs.has(k)){ favs.delete(k); s.classList.remove('on'); s.textContent = '☆'; }
+    else { favs.add(k); s.classList.add('on'); s.textContent = '★'; toast('已收藏'); }
+    saveFavs();
+    if(active === '__fav') render();
+  });
+
+  /* ---------- init ---------- */
+  buildChips();
+  render();
+  var m = DATA.meta || {};
+  foot.innerHTML = (m.disclaimer ? esc(m.disclaimer) + '<br>' : '') +
+    '数据来源：' + esc(m.source || '') + ' · 共 ' + (m.counts ? m.counts.entries : 0) + ' 条 / ' +
+    (m.counts ? m.counts.groups : 0) + ' 个种族分组<br>离线可用 · 可加入主屏幕 · 收藏保存在本机';
+  document.title = 'D&D 种族黑话速查';
+})();
+</script>
+</body>
+</html>
