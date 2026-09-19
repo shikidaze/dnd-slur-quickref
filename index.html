@@ -80,9 +80,12 @@
   /* a race group: the illustration is the background of the WHOLE column, darkened
      top-to-bottom so the title and the entry cards stay readable on top of it */
   .group{
-    position:relative;margin:0 0 14px;padding:12px 12px 14px;border-radius:var(--r);
+    position:relative;margin:0 0 16px;padding:12px 12px 14px;border-radius:var(--r);
     border:1px solid var(--line);overflow:hidden;scroll-margin-top:130px;
     background:#191613;
+    /* a soft dark edge along the bottom of every column, so one race reads as
+       separate from the next one even when its picture fills the whole column */
+    box-shadow:0 -20px 26px -24px rgba(0,0,0,.95) inset;
   }
   /* The illustration is the column's background: a real <img> so the browser sizes
      it for us (no aspect maths), with a 24 px stand-in underneath for instant paint
@@ -101,8 +104,9 @@
     background:linear-gradient(180deg,
       rgba(18,16,14,.34) 0px,
       rgba(18,16,14,.50) 200px,
-      rgba(18,16,14,.66) 420px,
-      rgba(18,16,14,.78) 100%);
+      rgba(18,16,14,.68) 420px,
+      rgba(18,16,14,.88) calc(100% - 46px),
+      rgba(18,16,14,.97) 100%);
   }
   .group>*{position:relative;z-index:1}
   .ghead{
