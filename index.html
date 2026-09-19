@@ -18,6 +18,11 @@
     --gold:#c8a15c; --gold2:#e0bd7c; --blood:#a2453c;
     --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
     --r:14px;
+    /* a codex, not an app: Chinese text is set in a serif (Songti / Noto Serif),
+       Latin labels in an old-style serif with wide small-caps spacing */
+    --serif:"Songti SC","Noto Serif CJK SC","Source Han Serif SC","Source Han Serif CN",STSong,SimSun,"Times New Roman",serif;
+    --latin:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
@@ -27,10 +32,13 @@
       radial-gradient(900px 500px at -10% 10%, #1d2622 0%, transparent 55%),
       var(--bg);
     color:var(--ink);
-    font:16px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
+    font:16px/1.6 var(--serif);
     min-height:100vh; padding-bottom:calc(28px + var(--safe-b));
     overscroll-behavior-y:none;
   }
+  /* every emoji badge is pressed into a monochrome bronze stamp so the icons stop
+     fighting the woodcut artwork */
+  .ic,.chip .ic,.d20+.brand-ico{filter:grayscale(1) sepia(.62) saturate(1.7) brightness(1.06) contrast(1.05)}
   /* ---------- header ---------- */
   header{
     position:sticky; top:0; z-index:30;
@@ -41,13 +49,13 @@
   }
   .brand{display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .d20{
-    width:34px;height:34px;flex:0 0 34px;border-radius:10px;
-    background:linear-gradient(145deg,var(--gold2),#8c6a33);
-    display:grid;place-items:center;color:#1a1510;font-weight:800;font-size:15px;
-    box-shadow:0 2px 10px rgba(200,161,92,.28);
+    width:36px;height:36px;flex:0 0 36px;border-radius:10px;object-fit:cover;
+    border:1px solid rgba(200,161,92,.35);
+    box-shadow:0 3px 12px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.6) inset;
   }
-  .brand h1{font-size:16.5px;margin:0;font-weight:700;letter-spacing:.02em}
-  .brand .sub{font-size:11.5px;color:var(--ink3);margin-top:1px;letter-spacing:.04em}
+  .brand h1{font-size:17.5px;margin:0;font-weight:700;letter-spacing:.06em;font-family:var(--serif)}
+  .brand .sub{font-size:10.5px;color:var(--ink3);margin-top:2px;letter-spacing:.14em;
+    font-family:var(--latin);text-transform:uppercase}
   .searchbox{position:relative}
   .searchbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
   #q{
@@ -98,8 +106,9 @@
     mask-image:linear-gradient(180deg,#000 0%,#000 70%,rgba(0,0,0,.45) 88%,rgba(0,0,0,0) 100%);}
   .gart img{display:block;width:100%;height:auto}
   .gart .full{position:absolute;inset:0;height:100%;object-fit:cover;object-position:center 26%;
-    opacity:0;transition:opacity .4s}
-  .gart .full.on{opacity:1}
+    opacity:0;filter:brightness(1.1) contrast(.94) saturate(.9);
+    transition:opacity .5s ease, filter .7s ease}
+  .gart .full.on{opacity:1;filter:none}
   /* cover mode: the picture is about as tall as the column, so let it FILL the
      column (its own bottom fade then lands exactly on the column's bottom edge) */
   .group.art-fill .gart{height:100%}
@@ -117,17 +126,37 @@
       rgba(18,16,14,1) 100%);
   }
   .group>*{position:relative;z-index:1}
+  /* a chapter heading, the way a printed book opens a race: rules on both sides,
+     the Chinese name in the middle, the Latin name and the count beneath it */
   .ghead{
-    display:flex;align-items:baseline;gap:8px;margin:0 2px 9px;
-    padding-bottom:7px;border-bottom:1px solid rgba(200,161,92,.22);
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    margin:0 -12px 10px;padding:9px 12px 8px;position:relative;
+    background:linear-gradient(180deg,rgba(18,16,14,.72) 0%,rgba(18,16,14,.35) 70%,rgba(18,16,14,0) 100%);
   }
-  .ghead .ic{font-size:17px;line-height:1}
-  .ghead .zh{font-size:16.5px;font-weight:700;letter-spacing:.01em;text-shadow:0 1px 6px rgba(0,0,0,.85)}
-  .ghead .en{font-size:11.5px;color:var(--gold2);letter-spacing:.05em;text-transform:uppercase;
-    text-shadow:0 1px 6px rgba(0,0,0,.85)}
-  .ghead .n{margin-left:auto;font-size:11.5px;color:var(--ink2);
-    background:rgba(18,16,14,.55);border:1px solid rgba(200,161,92,.3);
-    padding:1px 8px;border-radius:999px}
+  .ghead .row{display:flex;align-items:center;gap:9px;width:100%}
+  .ghead .row::before,.ghead .row::after{
+    content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(200,161,92,.42),transparent);
+  }
+  .ghead .ic{font-size:16px;line-height:1}
+  .ghead .zh{font-size:17px;font-weight:700;letter-spacing:.14em;text-shadow:0 1px 6px rgba(0,0,0,.85);white-space:nowrap}
+  .ghead .meta{font-size:10.5px;color:var(--gold2);letter-spacing:.16em;text-transform:uppercase;
+    font-family:var(--latin);text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .ghead .meta b{color:var(--ink2);font-weight:400;letter-spacing:.08em}
+  /* the ornament that closes a chapter */
+  .fleuron{
+    text-align:center;color:rgba(200,161,92,.5);font-size:14px;line-height:1;
+    margin:2px 0 18px;letter-spacing:.6em;text-indent:.6em;
+  }
+  /* "you are here" label while scrolling a very long list */
+  #nowbar{
+    position:fixed;left:50%;transform:translate(-50%,-140%);top:calc(var(--safe-t) + 96px);
+    z-index:35;padding:3px 12px;border-radius:999px;white-space:nowrap;
+    background:rgba(24,20,17,.9);border:1px solid rgba(200,161,92,.3);
+    color:var(--gold2);font-size:12px;letter-spacing:.1em;
+    box-shadow:0 6px 18px rgba(0,0,0,.5);transition:transform .25s,opacity .25s;opacity:0;
+  }
+  #nowbar.on{transform:translate(-50%,0);opacity:1}
   ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
   /* back to top (334 entries is a long scroll) */
   #top{
@@ -140,18 +169,25 @@
   }
   #top.on{opacity:1;transform:none;pointer-events:auto}
   li{
-    display:flex;align-items:center;gap:10px;
+    display:flex;align-items:center;gap:10px;position:relative;
     background:rgba(30,26,22,.74);border:1px solid var(--line);border-radius:var(--r);
-    padding:10px 12px;transition:.14s;
+    padding:10px 12px 10px 15px;transition:.14s;
+  }
+  /* a thin gold index ribbon down the left edge of every entry, like a bookmark */
+  li::before{
+    content:'';position:absolute;left:0;top:9px;bottom:9px;width:2px;border-radius:0 2px 2px 0;
+    background:linear-gradient(180deg,rgba(200,161,92,.55),rgba(200,161,92,.1));
   }
   li:active{background:rgba(42,37,31,.86);transform:scale(.995)}
   .txt{min-width:0;flex:1}
-  .zh{font-size:16.5px;font-weight:600;letter-spacing:.01em;word-break:break-word}
-  .en{font-size:13px;color:var(--gold);margin-top:2px;letter-spacing:.01em;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-word}
-  .sub{display:inline-block;margin-top:5px;font-size:11px;color:var(--ink2);
-       border:1px solid rgba(200,161,92,.28);border-radius:999px;padding:1px 8px;
-       background:rgba(200,161,92,.06)}
+  .zh{font-size:16.5px;font-weight:600;letter-spacing:.02em;word-break:break-word;font-family:var(--serif)}
+  .en{font-size:12.5px;color:var(--gold);margin-top:3px;letter-spacing:.02em;
+      font-family:var(--mono);word-break:break-word}
+  /* "who uses it" reads as a wax seal rather than a UI pill */
+  .sub{display:inline-block;margin-top:6px;font-size:10.5px;color:#e8c894;
+       border:1px solid rgba(162,69,60,.55);border-radius:999px;padding:1px 9px;
+       background:radial-gradient(120% 160% at 30% 20%, rgba(162,69,60,.5), rgba(90,32,28,.55));
+       box-shadow:0 1px 0 rgba(0,0,0,.4) inset;letter-spacing:.04em}
   .star{
     flex:0 0 30px;width:30px;height:30px;border:0;border-radius:9px;background:transparent;
     color:var(--ink3);font-size:16px;cursor:pointer;display:grid;place-items:center;
@@ -160,14 +196,22 @@
   mark{background:rgba(200,161,92,.32);color:var(--gold2);border-radius:3px;padding:0 1px}
   /* ---------- misc ---------- */
   .empty{text-align:center;color:var(--ink3);padding:48px 20px;font-size:14.5px}
-  .empty b{display:block;font-size:34px;margin-bottom:10px;opacity:.5}
+  .empty b{display:block;font-size:16px;margin-bottom:10px;color:var(--ink2);letter-spacing:.1em;font-family:var(--serif)}
+  .empty-art{width:88px;height:88px;border-radius:14px;margin:0 auto 16px;display:block;
+    opacity:.72;border:1px solid rgba(200,161,92,.28)}
+  /* the intro and the appendix read as marginalia: a gold rule down the side,
+     smaller serif text, indented from the page edge */
   details.note{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:11px 13px;margin-bottom:10px;font-size:13.5px;color:var(--ink2);
+    background:linear-gradient(90deg,rgba(200,161,92,.05),rgba(30,26,22,.55) 40%);
+    border:0;border-left:2px solid rgba(200,161,92,.42);border-radius:0 var(--r) var(--r) 0;
+    padding:10px 14px 11px 13px;margin:0 0 16px 2px;font-size:13px;color:var(--ink2);
+    font-family:var(--serif);
   }
-  details.note summary{cursor:pointer;color:var(--ink);font-weight:600;font-size:14px}
-  details.note .body{margin-top:8px;white-space:pre-wrap;line-height:1.65}
-  .apx{padding:9px 0;border-bottom:1px dashed var(--line)}
+  details.note summary{cursor:pointer;color:var(--gold2);font-weight:600;font-size:12.5px;
+    letter-spacing:.1em;font-family:var(--latin);text-transform:uppercase}
+  details.note summary::marker{color:rgba(200,161,92,.6)}
+  details.note .body{margin-top:8px;white-space:pre-wrap;line-height:1.75}
+  .apx{padding:9px 0;border-bottom:1px dashed rgba(200,161,92,.16)}
   .apx:last-child{border-bottom:0}
   .apx-zh{font-size:13.5px;color:var(--ink)}
   .apx-en{font-size:13px;color:var(--gold);margin-top:2px;word-break:break-word}
@@ -193,7 +237,7 @@
 <header>
   <div>
     <div class="brand">
-      <div class="d20">D20</div>
+      <img class="d20" src="apple-touch-icon.png" alt="">
       <div>
         <h1>仇恨之书</h1>
         <div class="sub" id="brandSub">The Big List of Racial Slurs</div>
@@ -213,6 +257,8 @@
 </header>
 
 <main id="main"></main>
+
+<div id="nowbar"></div>
 
 <footer id="foot"></footer>
 <button id="top" aria-label="回到顶部">↑</button>
@@ -300,7 +346,7 @@
       var tall = g.entries.length > 6 ? 'tall' : 'short';
       var art = artFor(g.key);
       var TINY = window.DND_TINY || {};
-      html += '<section class="group" id="g-' + g.key + '" data-h="' + tall + '">';
+      html += '<section class="group" id="g-' + g.key + '" data-h="' + tall + '" data-zh="' + esc(g.zh) + '">';
       if(art){
         // stand-in paints immediately; the real picture fades in once it is decoded.
         // positioning is inline so it cannot be lost to stylesheet ordering.
@@ -308,10 +354,9 @@
                 '<img class="tiny" src="' + esc(TINY[g.key] || art) + '" alt="">' +
                 '<img class="full" data-src="' + esc(art) + '" alt=""></div>';
       }
-      html += '<div class="ghead"><span class="ic">' + g.icon + '</span>' +
-              '<span class="zh">' + esc(g.zh) + '</span>' +
-              '<span class="en">' + esc(g.en) + '</span>' +
-              '<span class="n">' + g.entries.length + '</span></div><ul>';
+      html += '<div class="ghead"><div class="row"><span class="ic">' + g.icon + '</span>' +
+              '<span class="zh">' + esc(g.zh) + '</span></div>' +
+              '<div class="meta">' + esc(g.en) + ' <b>· ' + g.entries.length + '</b></div></div><ul>';
       g.entries.forEach(function(e){
         var k = key(e), on = favs.has(k);
         html += '<li data-k="' + esc(k) + '"><div class="txt">' +
@@ -321,6 +366,8 @@
                 '</div><button class="star' + (on ? ' on' : '') + '" aria-label="收藏">' + (on ? '★' : '☆') + '</button></li>';
       });
       html += '</ul></section>';
+      // a printed ornament closing each chapter (not after the last one)
+      html += '<div class="fleuron">❦</div>';
     });
     if(DATA.appendix && DATA.appendix.length) html += appendixBlock(term);
     main.innerHTML = html;
@@ -371,7 +418,9 @@
     }, { rootMargin: '400px 0px' });
     nodes.forEach(function(el){ io.observe(el); });
   }
-  function emptyBox(icon, title, sub){    return '<div class="empty"><b>' + icon + '</b>' + esc(title) + '<div style="margin-top:6px">' + esc(sub) + '</div></div>';
+  function emptyBox(icon, title, sub){
+    return '<div class="empty"><img class="empty-art" src="apple-touch-icon.png" alt="" onerror="this.style.display=\'none\'">' +
+           '<b>' + esc(title) + '</b><div style="margin-top:6px">' + esc(sub) + '</div></div>';
   }
   function introBlock(term){
     if(term || active !== 'all' || !DATA.intro || !DATA.intro.length) return '';
@@ -437,6 +486,32 @@
   }
   buildChips();
   render();
+  // "you are here": while scrolling, name the race whose column covers the top
+  var nowbar = $('#nowbar');
+  if(nowbar && 'IntersectionObserver' in window){
+    var nowCurrent = null, seen = {};
+    var io2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting) seen[en.target.id] = en.boundingClientRect.top;
+        else delete seen[en.target.id];
+      });
+      var best = null, bestTop = Infinity;
+      for(var id in seen){ if(seen[id] < bestTop){ bestTop = seen[id]; best = id; } }
+      var sec = best ? document.getElementById(best) : null;
+      var label = sec ? sec.getAttribute('data-zh') : null;
+      if(label && label !== nowCurrent){ nowCurrent = label; nowbar.textContent = label; }
+      var y = (typeof window.scrollY === 'number' ? window.scrollY : 0) ||
+              (document.documentElement ? document.documentElement.scrollTop : 0) || 0;
+      nowbar.classList.toggle('on', !!label && y > 320);
+    }, { rootMargin: '-110px 0px -55% 0px', threshold: 0 });
+    var rewatch = function(){
+      seen = {};
+      [].slice.call(main.querySelectorAll('.group')).forEach(function(g){ io2.observe(g); });
+    };
+    rewatch();
+    var baseRender = render;
+    render = function(){ baseRender.apply(null, arguments); rewatch(); };
+  }
   var m = DATA.meta || {};
   foot.innerHTML = (m.disclaimer ? esc(m.disclaimer) + '<br>' : '') +
     '共 ' + (m.counts ? m.counts.entries : 0) + ' 条 / ' + (m.counts ? m.counts.groups : 0) + ' 个种族分组' +
