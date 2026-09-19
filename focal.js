@@ -1,0 +1,1 @@
+window.DND_FOCAL = {"dwarf":36,"elf":36,"drow":30,"halfelf":25,"halfling":29,"human":39,"dragonborn":29,"gnome":30,"orc":26,"tiefling":35,"aasimar":46,"kenku":32,"aarakocra":17,"gnoll":31,"kobold":58,"genasi":35,"goblin":43,"firbolg":24,"triton":24,"tabaxi":23,"giant":32,"goliath":21,"centaur":22,"warforged":14,"misc":36};

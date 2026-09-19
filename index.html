@@ -109,10 +109,12 @@
     opacity:0;filter:brightness(1.1) contrast(.94) saturate(.9);
     transition:opacity .5s ease, filter .7s ease}
   .gart .full.on{opacity:1;filter:none}
-  /* cover mode: the picture is about as tall as the column, so let it FILL the
-     column (its own bottom fade then lands exactly on the column's bottom edge) */
+  /* fill mode: the column is shorter than the picture, so keep the picture at its
+     natural scale (no zoom, nothing cut off at the sides) and slide it up/down so
+     the face lands in the middle of the column */
   .group.art-fill .gart{height:100%}
   .group.art-fill .gart img{height:100%;object-fit:cover;object-position:center 26%}
+  .group.art-top .gart{height:auto}
   /* top mode: the column is much taller than the picture, so the picture sits at
      full width on top and the column's own gradient darkens the rest */
   .group.art-top .gart img{height:auto}
@@ -408,6 +410,8 @@
           // head at the container's centre: y = (head - c/2) / (1 - c)
           var head = (window.DND_FOCAL || {})[sec.id.replace(/^g-/, '')];
           if(head && !tallMode){
+            // object-position y% : "image y% aligns with container y%" — put the head
+            // at the container's centre:  y = (head - c/2) / (1 - c),  c = column/art
             var c = Math.min(0.95, sec.clientHeight / artH);
             var y = (head / 100 - c / 2) / (1 - c) * 100;
             img.style.objectPosition = 'center ' + Math.max(0, Math.min(100, Math.round(y))) + '%';
