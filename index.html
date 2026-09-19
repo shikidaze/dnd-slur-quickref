@@ -332,7 +332,12 @@
       if(!real) return;
       img.removeAttribute('data-src');
       img.onload = function(){ img.classList.add('on'); };
-      img.src = real;
+      // images may come from a mirror CDN (much faster than github.io from mainland
+      // China); if that copy fails, fall back to the file next to this page
+      img.onerror = function(){
+        if(CDN && img.src.indexOf(CDN) === 0) img.src = real;
+      };
+      img.src = (CDN && cdnOk) ? CDN + real : real;
     };
     if(!('IntersectionObserver' in window)){ nodes.forEach(load); return; }
     var io = new IntersectionObserver(function(entries){
@@ -399,6 +404,15 @@
   });
 
   /* ---------- init ---------- */
+  // mirror probe: if the CDN copy of an image answers quickly, take the rest from
+  // there (github.io is slow from some networks); otherwise stay same-origin
+  var CDN = window.DND_CDN || '';
+  var cdnOk = false;
+  if(CDN){
+    var probe = new Image(), t0 = Date.now();
+    probe.onload = function(){ if(Date.now() - t0 < 2500) cdnOk = true; };
+    probe.src = CDN + 'assets/dwarf.webp';
+  }
   buildChips();
   render();
   var m = DATA.meta || {};

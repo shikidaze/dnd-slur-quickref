@@ -25,3 +25,4 @@ window.DND_ASSETS = {
  "warforged": "assets/warforged.webp",
  "misc": "assets/misc.webp"
 };
+window.DND_CDN = "https://cdn.jsdelivr.net/gh/shikidaze/dnd-slur-quickref@main/";
