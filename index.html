@@ -85,31 +85,35 @@
     background:#191613;
   }
   /* The illustration is the column's background. It is shown at full column width
-     (so the whole picture is visible and sharp) and anchored to the top; the scrim
-     fades it into the dark column further down, where the entry cards live. */
+     (whole picture visible, no zoom) and anchored to the top; the picture itself is
+     masked so it DISSOLVES into the dark column instead of ending in a hard edge. */
   .group.art-on::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
+    content:'';position:absolute;left:0;right:0;top:0;height:100%;pointer-events:none;
     background-image:var(--art);background-repeat:no-repeat;
     background-size:100% auto;background-position:center top;
-    opacity:.9;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 58%,rgba(0,0,0,.5) 84%,rgba(0,0,0,0) 100%);
+    mask-image:linear-gradient(180deg,#000 0%,#000 58%,rgba(0,0,0,.5) 84%,rgba(0,0,0,0) 100%);
+    opacity:.95;
   }
+  /* a tall column only needs the picture itself (its own height, set from the box
+     width by paintBanners) — below that the mask has already faded it out */
+  .group.art-on[data-h="tall"]::before{height:var(--arth,430px)}
   .group.art-on::after{
     content:'';position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,
-      rgba(18,16,14,.22) 0px,
-      rgba(18,16,14,.45) 240px,
-      rgba(18,16,14,.86) 430px,
-      rgba(18,16,14,.92) 100%);
+      rgba(18,16,14,.30) 0px,
+      rgba(18,16,14,.46) 200px,
+      rgba(18,16,14,.62) 400px,
+      rgba(18,16,14,.74) 100%);
   }
-  /* a very short column (few entries) is shorter than the picture, so fill the box
-     instead of cutting the artwork off at the bottom */
+  /* a very short column (few entries) is shorter than the picture, so fill the box */
   .group.art-on[data-h="short"]::before{background-size:cover;background-position:center 24%}
   .group.art-on[data-h="short"]::after{
     content:'';position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,
-      rgba(18,16,14,.30) 0%,
-      rgba(18,16,14,.52) 45%,
-      rgba(18,16,14,.84) 100%);
+      rgba(18,16,14,.34) 0%,
+      rgba(18,16,14,.5) 40%,
+      rgba(18,16,14,.72) 100%);
   }
   .group>*{position:relative;z-index:1}
   .ghead{
@@ -213,6 +217,7 @@
 <button id="top" aria-label="回到顶部">↑</button>
 <div class="toast" id="toast"></div>
 
+<script src="assets-tiny.js"></script>
 <script src="assets.js"></script>
 <script src="data.js"></script>
 <script>
@@ -318,16 +323,26 @@
     var A = window.DND_ASSETS || {};
     return A[k] || null;
   }
-  /* 25 backgrounds decoded at once would cost ~90 MB of image memory on a phone,
-     so a group's art is only attached when the group comes near the viewport. */
+  /* 25 backgrounds decoded at once would cost ~90 MB of image memory on a phone, so
+     a column's art is attached only when it comes near the viewport — and it goes in
+     twice: instantly as a 24 px stand-in, then as the real picture once downloaded. */
   function paintBanners(){
     var nodes = [].slice.call(main.querySelectorAll('.group[data-art]'));
     if(!nodes.length) return;
+    var TINY = window.DND_TINY || {};
     var show = function(el){
-      el.style.setProperty('--art', 'url(' + el.getAttribute('data-art') + ')');
-      // NOTE: data-art is deliberately kept — it is what the observer keys on — the
-      // styling itself hangs off this class
+      var real = el.getAttribute('data-art');
+      var box = el.clientWidth;
+      // the picture's own height, so the mask dissolves exactly its bottom edge
+      // (assets are 820x789 => h/w = .962)
+      el.style.setProperty('--arth', Math.round(box * 0.962) + 'px');
       el.classList.add('art-on');
+      var key = el.id.replace(/^g-/, '');
+      if(TINY[key]) el.style.setProperty('--art', 'url(' + TINY[key] + ')');
+      var probe = new Image();
+      probe.onload = function(){ el.style.setProperty('--art', 'url(' + real + ')'); };
+      probe.src = real;
+      if(probe.complete && TINY[key]) el.style.setProperty('--art', 'url(' + real + ')');
     };
     if(!('IntersectionObserver' in window)){ nodes.forEach(show); return; }
     var io = new IntersectionObserver(function(entries){
@@ -336,7 +351,7 @@
         show(en.target);
         io.unobserve(en.target);
       });
-    }, { rootMargin: '700px 0px' });
+    }, { rootMargin: '350px 0px' });
     nodes.forEach(function(el){ io.observe(el); });
   }
   function emptyBox(icon, title, sub){    return '<div class="empty"><b>' + icon + '</b>' + esc(title) + '<div style="margin-top:6px">' + esc(sub) + '</div></div>';
