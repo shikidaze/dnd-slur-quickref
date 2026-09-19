@@ -100,8 +100,13 @@
   .gart .full{position:absolute;inset:0;height:100%;object-fit:cover;object-position:center 26%;
     opacity:0;transition:opacity .4s}
   .gart .full.on{opacity:1}
-  .group[data-h="short"] .gart{height:100%}
-  .group[data-h="short"] .gart img{height:100%;object-fit:cover;object-position:center 26%}
+  /* cover mode: the picture is about as tall as the column, so let it FILL the
+     column (its own bottom fade then lands exactly on the column's bottom edge) */
+  .group.art-fill .gart{height:100%}
+  .group.art-fill .gart img{height:100%;object-fit:cover;object-position:center 26%}
+  /* top mode: the column is much taller than the picture, so the picture sits at
+     full width on top and the column's own gradient darkens the rest */
+  .group.art-top .gart img{height:auto}
   .group.art-on::after{
     content:'';position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(180deg,
@@ -338,7 +343,17 @@
       var real = img.getAttribute('data-src');
       if(!real) return;
       img.removeAttribute('data-src');
-      img.onload = function(){ img.classList.add('on'); };
+      img.onload = function(){
+        img.classList.add('on');
+        // decide by REAL heights, not by entry count: if the picture is about as
+        // tall as the column, fill the column; if the column is much taller, let the
+        // picture sit on top and the column's gradient do the fading
+        var sec = img.closest ? img.closest('.group') : null;
+        if(sec){
+          var artH = img.naturalHeight / img.naturalWidth * sec.clientWidth;
+          sec.classList.add(sec.clientHeight > artH * 1.12 ? 'art-top' : 'art-fill');
+        }
+      };
       // images may come from a mirror CDN (much faster than github.io from mainland
       // China); if that copy fails, fall back to the file next to this page
       img.onerror = function(){
