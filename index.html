@@ -215,6 +215,12 @@
     letter-spacing:.1em;font-family:var(--latin);text-transform:uppercase}
   details.note summary::marker{color:rgba(200,161,92,.6)}
   details.note .body{margin-top:8px;white-space:pre-wrap;line-height:1.75}
+  /* bilingual paragraph: Chinese line, then the English original below it */
+  details.note .pair{margin:0 0 10px}
+  details.note .pair:last-child{margin-bottom:0}
+  details.note .pair .zh{color:var(--ink2);white-space:normal}
+  details.note .pair .en{margin-top:3px;font-family:var(--latin);font-size:12px;line-height:1.55;
+    color:var(--ink3);white-space:normal;letter-spacing:.01em}
   .apx{padding:9px 0;border-bottom:1px dashed rgba(200,161,92,.16)}
   .apx:last-child{border-bottom:0}
   .apx-zh{font-size:13.5px;color:var(--ink)}
@@ -441,8 +447,17 @@
   }
   function introBlock(term){
     if(term || active !== 'all' || !DATA.intro || !DATA.intro.length) return '';
+    // each paragraph is a ZH/EN pair: Chinese on its own line, the English original
+    // underneath in smaller type (the cover is bilingual)
+    var body = DATA.intro.map(function(p){
+      if(p && typeof p === 'object'){
+        return '<div class="pair"><div class="zh">' + esc(p.zh) + '</div>' +
+               (p.en ? '<div class="en">' + esc(p.en) + '</div>' : '') + '</div>';
+      }
+      return '<div class="pair"><div class="zh">' + esc(p) + '</div></div>';
+    }).join('');
     return '<details class="note"><summary>关于这份清单（原作者前言）</summary><div class="body">' +
-           DATA.intro.map(esc).join('\n') + '</div></details>';
+           body + '</div></details>';
   }
   function appendixBlock(term){
     // Each appendix line holds the Chinese gloss first and the English original

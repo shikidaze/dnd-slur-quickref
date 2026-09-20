@@ -13,12 +13,30 @@ window.DND_DATA = {
   "disclaimer": "奇幻设定内的虚构用语，仅限跑团桌上使用；请勿用于现实中的任何人。"
  },
  "intro": [
-  "我整理了一份种族歧视用语清单，供你在对话中使用！ I compiled a list o f racial slurs for y ou t o use in conv er sation!",
-  "正如标题所示，我希望我们能冲上 r/all 首页，让很多人摸不着头脑。 a lot o f people. As y ou can see from the title, I'm hoping w e can r each r/all and confus e",
-  "才有了整整 13 页的种族歧视用语。 功劳归于所有在此发帖的人。否则这份清单大概只有五条。多亏了他们，我们 about fiv e it ems long. Thanks t o them, w e hav e 13 p ages o f racial slurs. Cr edit goes t o ev er y one who post ed her e. Other wise this list w ould be",
-  "如果其中任何一条涉及现实世界种族的贬损含义，请随时留言指出。 race please feel fr ee t o comment if any o f these is der ogat or y t o a r eal-w orld",
-  "那么，闲话少说，我这就奉上 So, without further ado, I present",
-  "种族侮辱大列表 The Big List o f Racial Slurs"
+  {
+   "zh": "我整理了一份种族歧视用语清单，供你在对话中使用！",
+   "en": "I compiled a list of racial slurs for you to use in conversation!"
+  },
+  {
+   "zh": "正如标题所示，我希望我们能冲上 r/all 首页，让很多人摸不着头脑。",
+   "en": "As you can see from the title, I'm hoping we can reach r/all and confuse a lot of people."
+  },
+  {
+   "zh": "如果其中任何一条涉及现实世界种族的贬损含义，请随时留言指出。",
+   "en": "Please feel free to comment if any of these is derogatory to a real-world race."
+  },
+  {
+   "zh": "功劳归于所有在此发帖的人。否则这份清单大概只有五条——多亏了他们，才有了整整 13 页的种族歧视用语。",
+   "en": "Credit goes to everyone who posted here. Otherwise this list would be about five items long. Thanks to them, we have 13 pages of racial slurs."
+  },
+  {
+   "zh": "那么，闲话少说，我这就奉上——",
+   "en": "So, without further ado, I present"
+  },
+  {
+   "zh": "种族侮辱大列表",
+   "en": "The Big List of Racial Slurs"
+  }
  ],
  "groups": [
   {
