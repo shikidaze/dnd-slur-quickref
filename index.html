@@ -473,7 +473,7 @@
       var block = '<div class="apx">';
       if (zh) block += '<div class="apx-zh">' + hl(zh, term) + '</div>';
       if (en) block += '<div class="apx-en">' + hl(en, term) + '</div>';
-      block += '<span class="sub">' + esc(a.section) + ' · 第 ' + a.page + ' 页</span></div>';
+      block += '<span class="sub">' + esc(a.section) + '</span></div>';
       return block;
     }).join('');
     return '<details class="note"><summary>附录 · 间接种族侮辱与告示（' + DATA.appendix.length + '）</summary><div class="body">' + items + '</div></details>';
