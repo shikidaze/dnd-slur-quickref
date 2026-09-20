@@ -460,8 +460,7 @@
       }
       return '<div class="pair"><div class="zh">' + esc(p) + '</div></div>';
     }).join('');
-    body += '<div class="made">这一页是 100% vibecoding 的产物：28 页 PDF 的解析、334 条数据的整理、' +
-            '25 张种族插图、以及整个界面，都是在 DeepSeek Harness（DSH）里用对话一步步做出来的。</div>';
+    body += '<div class="made">该工具 100% vibecoding，由吃白饭的大肥鱼制作</div>';
     return '<details class="note"><summary>关于这份清单（原作者前言）</summary><div class="body">' +
            body + '</div></details>';
   }
@@ -555,7 +554,7 @@
     '共 ' + (m.counts ? m.counts.entries : 0) + ' 条 / ' + (m.counts ? m.counts.groups : 0) + ' 个种族分组' +
     (m.authorUrl ? '<br>清单来源：<a href="' + esc(m.authorUrl) + '" target="_blank" rel="noopener">' + esc(m.author || m.authorUrl) + '</a>' : '') +
     (m.authorNote ? '<br>' + esc(m.authorNote) : '') +
-    '<br><span class="madewith">100% vibecoding · 由 DeepSeek Harness（DSH）制作</span>' +
+    '<br><span class="madewith">该工具 100% vibecoding，由吃白饭的大肥鱼制作</span>' +
     '<br>离线可用 · 可加入主屏幕 · 收藏保存在本机';
   document.title = '仇恨之书';
 })();
