@@ -75,8 +75,18 @@
   #chips{
     display:flex;gap:8px;overflow-x:auto;padding:10px 14px 2px;
     scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    /* the row is horizontally scrollable on phones; on a desktop mouse there is no
+       touch-drag, so the wheel handler below maps vertical wheel to horizontal scroll */
+    overscroll-behavior-x:contain;
   }
   #chips::-webkit-scrollbar{display:none}
+  /* an edge hint: a soft fade that only shows while more chips are off-screen */
+  #chips.can-right{mask-image:linear-gradient(90deg,#000 88%,transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent 100%)}
+  #chips.can-left.can-right{mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%)}
+  #chips.can-left{mask-image:linear-gradient(90deg,transparent 0,#000 12%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%)}
   .chip{
     flex:0 0 auto;padding:6px 12px;border-radius:999px;border:1px solid var(--line);
     background:var(--card);color:var(--ink2);font-size:13px;white-space:nowrap;cursor:pointer;
@@ -244,6 +254,10 @@
     main{max-width:680px;margin:0 auto}
     header>div, #chips{max-width:680px;margin-left:auto;margin-right:auto}
     ul{grid-template-columns:1fr 1fr}
+    /* on a desktop-width window there is no touch drag, so let the chips WRAP
+       instead of hiding half of them off-screen */
+    #chips{flex-wrap:wrap;overflow-x:visible;row-gap:8px;
+      mask-image:none !important;-webkit-mask-image:none !important}
   }
 </style>
 </head>
@@ -520,6 +534,53 @@
     var probe = new Image(), t0 = Date.now();
     probe.onload = function(){ if(Date.now() - t0 < 2500) cdnOk = true; };
     probe.src = CDN + 'assets/dwarf.webp';
+  }
+  /* ---------- chips: mouse support on desktop ---------- */
+  // 1) vertical wheel over the chip row scrolls it sideways (mouse users have no
+  //    touch drag); 2) drag with the left button also scrolls it; 3) the edge fades
+  //    advertise that there is more to the right.
+  var chipsEl = $('#chips');
+  if(chipsEl){
+    var markEdges = function(){
+      var max = chipsEl.scrollWidth - chipsEl.clientWidth;
+      chipsEl.classList.toggle('can-left', chipsEl.scrollLeft > 4);
+      chipsEl.classList.toggle('can-right', max > 4 && chipsEl.scrollLeft < max - 4);
+    };
+    chipsEl.addEventListener('scroll', markEdges, { passive: true });
+    window.addEventListener('resize', markEdges);
+    markEdges();
+    chipsEl.addEventListener('wheel', function(e){
+      if(chipsEl.scrollWidth <= chipsEl.clientWidth + 4) return;   // nothing to scroll
+      var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      var max = chipsEl.scrollWidth - chipsEl.clientWidth;
+      var before = chipsEl.scrollLeft;
+      chipsEl.scrollLeft = Math.max(0, Math.min(max, before + d));
+      if(chipsEl.scrollLeft !== before) e.preventDefault();        // else let the page scroll
+    }, { passive: false });
+    // drag-to-scroll with the mouse
+    var dragging = false, startX = 0, startLeft = 0, moved = 0;
+    chipsEl.addEventListener('mousedown', function(e){
+      if(e.button !== 0 || chipsEl.scrollWidth <= chipsEl.clientWidth + 4) return;
+      dragging = true; moved = 0; startX = e.clientX; startLeft = chipsEl.scrollLeft;
+      chipsEl.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', function(e){
+      if(!dragging) return;
+      var dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      chipsEl.scrollLeft = startLeft - dx;
+      if(moved > 3) e.preventDefault();
+    });
+    window.addEventListener('mouseup', function(){
+      if(!dragging) return;
+      dragging = false; chipsEl.style.cursor = '';
+      // a drag should not also fire the chip's click
+      if(moved > 3){
+        var swallow = function(ev){ ev.stopPropagation(); ev.preventDefault(); };
+        window.addEventListener('click', swallow, true);
+        setTimeout(function(){ window.removeEventListener('click', swallow, true); }, 0);
+      }
+    });
   }
   buildChips();
   render();
