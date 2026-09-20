@@ -532,7 +532,8 @@
   var m = DATA.meta || {};
   foot.innerHTML = (m.disclaimer ? esc(m.disclaimer) + '<br>' : '') +
     '共 ' + (m.counts ? m.counts.entries : 0) + ' 条 / ' + (m.counts ? m.counts.groups : 0) + ' 个种族分组' +
-    (m.authorUrl ? '<br>作者发布页：<a href="' + esc(m.authorUrl) + '" target="_blank" rel="noopener">' + esc(m.author || m.authorUrl) + '</a>' : '') +
+    (m.authorUrl ? '<br>清单来源：<a href="' + esc(m.authorUrl) + '" target="_blank" rel="noopener">' + esc(m.author || m.authorUrl) + '</a>' : '') +
+    (m.authorNote ? '<br>' + esc(m.authorNote) : '') +
     '<br>离线可用 · 可加入主屏幕 · 收藏保存在本机';
   document.title = '仇恨之书';
 })();
