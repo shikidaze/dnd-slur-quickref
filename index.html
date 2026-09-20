@@ -221,6 +221,10 @@
   details.note .pair .zh{color:var(--ink2);white-space:normal}
   details.note .pair .en{margin-top:3px;font-family:var(--latin);font-size:12px;line-height:1.55;
     color:var(--ink3);white-space:normal;letter-spacing:.01em}
+  /* how this page was made */
+  details.note .made{margin-top:12px;padding-top:10px;border-top:1px dashed rgba(200,161,92,.22);
+    font-size:12px;line-height:1.7;color:var(--gold2);white-space:normal}
+  .madewith{color:var(--gold2);letter-spacing:.04em}
   .apx{padding:9px 0;border-bottom:1px dashed rgba(200,161,92,.16)}
   .apx:last-child{border-bottom:0}
   .apx-zh{font-size:13.5px;color:var(--ink)}
@@ -456,6 +460,8 @@
       }
       return '<div class="pair"><div class="zh">' + esc(p) + '</div></div>';
     }).join('');
+    body += '<div class="made">这一页是 100% vibecoding 的产物：28 页 PDF 的解析、334 条数据的整理、' +
+            '25 张种族插图、以及整个界面，都是在 DeepSeek Harness（DSH）里用对话一步步做出来的。</div>';
     return '<details class="note"><summary>关于这份清单（原作者前言）</summary><div class="body">' +
            body + '</div></details>';
   }
@@ -549,6 +555,7 @@
     '共 ' + (m.counts ? m.counts.entries : 0) + ' 条 / ' + (m.counts ? m.counts.groups : 0) + ' 个种族分组' +
     (m.authorUrl ? '<br>清单来源：<a href="' + esc(m.authorUrl) + '" target="_blank" rel="noopener">' + esc(m.author || m.authorUrl) + '</a>' : '') +
     (m.authorNote ? '<br>' + esc(m.authorNote) : '') +
+    '<br><span class="madewith">100% vibecoding · 由 DeepSeek Harness（DSH）制作</span>' +
     '<br>离线可用 · 可加入主屏幕 · 收藏保存在本机';
   document.title = '仇恨之书';
 })();
