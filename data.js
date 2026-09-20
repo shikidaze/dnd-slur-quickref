@@ -9,7 +9,7 @@ window.DND_DATA = {
   },
   "author": "小红书分享帖",
   "authorUrl": "https://xhslink.cn/o/OW5jPF8mnr",
-  "authorNote": "该链接是小红书上的分享帖，分享者并非原作者；原清单作者不明，知情者欢迎补注。",
+  "authorNote": "该链接是小红书上的分享帖，原清单作者不明，知情者欢迎补注。",
   "disclaimer": "奇幻设定内的虚构用语，仅限跑团桌上使用；请勿用于现实中的任何人。"
  },
  "intro": [
