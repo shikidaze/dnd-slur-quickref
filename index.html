@@ -611,11 +611,18 @@
     render = function(){ baseRender.apply(null, arguments); rewatch(); };
   }
   var m = DATA.meta || {};
+  // three distinct roles, never merged:
+  //   工具发布者 = 烛堡奶蛙  ·  清单来源 = 小红书分享帖（其发布者≠原清单作者）
   foot.innerHTML = (m.disclaimer ? esc(m.disclaimer) + '<br>' : '') +
     '共 ' + (m.counts ? m.counts.entries : 0) + ' 条 / ' + (m.counts ? m.counts.groups : 0) + ' 个种族分组' +
-    (m.authorUrl ? '<br>清单来源：<a href="' + esc(m.authorUrl) + '" target="_blank" rel="noopener">' + esc(m.author || m.authorUrl) + '</a>' : '') +
+    '<br>工具发布者：' + esc(m.publisher || '烛堡奶蛙') +
+      (m.maker ? ' · ' + esc(m.maker) : '') +
+    '<br>清单来源：' +
+      (m.authorUrl
+        ? '<a href="' + esc(m.authorUrl) + '" target="_blank" rel="noopener">' + esc(m.author || '小红书分享帖') + '</a>'
+        : esc(m.author || '小红书分享帖')) +
+      '（分享帖发布者，非原清单作者）' +
     (m.authorNote ? '<br>' + esc(m.authorNote) : '') +
-    '<br><span class="madewith">该工具 100% vibecoding，由吃白饭的大肥鱼制作</span>' +
     '<br>离线可用 · 可加入主屏幕 · 收藏保存在本机';
   document.title = '仇恨之书';
 })();
